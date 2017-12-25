@@ -46,12 +46,19 @@ function openInVim() {
     let fileName = activeTextEditor.document.fileName;
     let line = position.line+1
     let column = position.character+1
+    let workspace = vscode.workspace.getWorkspaceFolder(activeTextEditor.document.uri);
+    if (!workspace) {
+        // user opened a file outside of any workspace
+        workspace = vscode.workspace.workspaceFolders[0]
+        vscode.window.showWarningMessage(`Defaulting workspace to ${workspace.name}`);
+    }
+    let workspacePath = workspace.uri.path;
     // let extensionPath = vscode.extensions.all.find(e => e.id.includes("open-in-vim")).extensionPath;
     let osascriptcode = `
         tell application "iTerm"
           set myNewWin to create window with default profile
           tell current session of myNewWin
-            write text "cd '${vscode.workspace.rootPath}'"
+            write text "cd '${workspacePath}'"
             write text "vim '${fileName}' '+call cursor(${line}, ${column})'; exit"
           end tell
         end tell
