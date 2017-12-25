@@ -2,8 +2,8 @@
     "name": "open-in-vim",
     "displayName": "Open in vim",
     "description": "Opens file in vim",
-    "version": "0.0.1",
-    "publisher": "INSERT-PUBLISHER-NAME",
+    "version": "0.0.0",
+    "publisher": "jonsmithers",
     "engines": {
         "vscode": "^1.19.0"
     },
