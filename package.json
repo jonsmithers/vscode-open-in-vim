@@ -1,7 +1,7 @@
 {
     "name": "open-in-vim",
-    "displayName": "Open in vim",
-    "description": "Opens file in vim",
+    "displayName": "Open in Vim",
+    "description": "Opens current file in vim",
     "version": "0.0.0",
     "publisher": "jonsmithers",
     "engines": {

@@ -48,11 +48,11 @@ function openInVim() {
     let column = position.character+1
     // let extensionPath = vscode.extensions.all.find(e => e.id.includes("open-in-vim")).extensionPath;
     let osascriptcode = `
-        tell application "iTerm2"
+        tell application "iTerm"
           set myNewWin to create window with default profile
           tell current session of myNewWin
             write text "cd '${vscode.workspace.rootPath}'"
-            write text "vim ${fileName} '+call cursor(${line}, ${column})'; exit"
+            write text "vim '${fileName}' '+call cursor(${line}, ${column})'; exit"
           end tell
         end tell
     `;
