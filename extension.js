@@ -14,10 +14,13 @@ function activate(context) {
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
     let disposable = vscode.commands.registerCommand('extension.sayHello', function () {
-        // The code you place here will be executed every time your command is executed
-
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World!');
+        try {
+            openInVim();
+        } catch(e) {
+            console.error(e);
+            vscode.window.showErrorMessage("extension experienced internal error" + e); // ?? not sure this works
+            throw e;
+        }
     });
 
     context.subscriptions.push(disposable);
@@ -28,3 +31,31 @@ exports.activate = activate;
 function deactivate() {
 }
 exports.deactivate = deactivate;
+
+function openInVim() {
+    let activeTextEditor = vscode.window.activeTextEditor;
+    if (!activeTextEditor) {
+        vscode.window.showErrorMessage('No active editor.');
+        return;
+    }
+    if (activeTextEditor.document.isUntitled) {
+        vscode.window.showErrorMessage('Please save the file first.');
+        return;
+    }
+    const position = activeTextEditor.selection.active;
+    let fileName = activeTextEditor.document.fileName;
+    let line = position.line+1
+    let column = position.character+1
+    // let extensionPath = vscode.extensions.all.find(e => e.id.includes("open-in-vim")).extensionPath;
+    let osascriptcode = `
+        tell application "iTerm2"
+          set myNewWin to create window with default profile
+          tell current session of myNewWin
+            write text "cd '${vscode.workspace.rootPath}'"
+            write text "vim ${fileName} '+call cursor(${line}, ${column})'; exit"
+          end tell
+        end tell
+    `;
+    let result = require('child_process').spawnSync("/usr/bin/osascript", {encoding: "utf8", input: osascriptcode})
+    // check for errors here?
+}
