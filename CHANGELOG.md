@@ -3,5 +3,8 @@ All notable changes to the "open-in-vim" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
+## [0.0.1]
+- Add configuration option to use integrated terminal or iterm
+
+## [0.0.0]
 - Initial release
