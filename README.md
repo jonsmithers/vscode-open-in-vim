@@ -17,6 +17,7 @@ Windows is not supported. This has not been tested on linux.
 ## To do
 
 - investigate better ways to activate this extension
+- support MacVim and gVim!
 - support OSX's native Terminal app
 - support linux!
 - support neovim?
@@ -25,3 +26,6 @@ Windows is not supported. This has not been tested on linux.
 
 VSCode doesn't automatically refresh its editor when changes are made to the
 underlying file. Not sure how to address this yet.
+
+The integrated terminal doesn't automatically switch to the tab running vim.
+What API is there to switch between terminals?
