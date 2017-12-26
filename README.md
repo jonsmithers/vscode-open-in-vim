@@ -3,7 +3,7 @@
 Open current file in vim. To activate this extension, press Cmd+Shift+P and
 search for "Open in Vim".
 
-Windows is not supported.
+Windows is not supported. This has not been tested on linux.
 
 ## Extension Settings
 
