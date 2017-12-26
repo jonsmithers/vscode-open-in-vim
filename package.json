@@ -20,7 +20,24 @@
                 "command": "open-in-vim.open",
                 "title": "Open in Vim"
             }
-        ]
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Open in Vim",
+            "properties": {
+                "open-in-vim.openMethod": {
+                    "type": "string",
+                    "enum": [
+                        "integrated-terminal",
+                        "osx.iterm",
+                        "osx.macvim"
+                    ],
+                    "scope": "resource",
+                    "default": "integrated-terminal",
+                    "description": "Determines how vim gets launched"
+                }
+            }
+        }
     },
     "scripts": {
         "postinstall": "node ./node_modules/vscode/bin/install",
