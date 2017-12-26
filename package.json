@@ -2,7 +2,7 @@
     "name": "open-in-vim",
     "displayName": "Open in Vim",
     "description": "Opens current file in vim",
-    "version": "0.0.0",
+    "version": "0.0.2",
     "publisher": "jonsmithers",
     "engines": {
         "vscode": "^1.19.0"
