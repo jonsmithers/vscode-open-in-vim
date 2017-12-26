@@ -34,6 +34,20 @@ exports.deactivate = deactivate;
 
 function openInVim() {
     let {openMethod} = vscode.workspace.getConfiguration()["open-in-vim"]
+
+    let activeTextEditor = vscode.window.activeTextEditor;
+    if (!activeTextEditor) {
+        vscode.window.showErrorMessage('No active editor.');
+        return;
+    }
+    if (activeTextEditor.document.isUntitled) {
+        vscode.window.showErrorMessage('Please save the file first.');
+        return;
+    }
+    if (activeTextEditor.document.isDirty) {
+        activeTextEditor.document.save();
+    }
+
     let actualOpenMethod = openMethods[openMethod];
     if (!actualOpenMethod) {
         let availableMethods = Object.keys(openMethods).map(name => `"${name}"`).join(", ");
@@ -46,17 +60,6 @@ function openInVim() {
 const openMethods = {
     "osx.iterm": function() {
         let activeTextEditor = vscode.window.activeTextEditor;
-        if (!activeTextEditor) {
-            vscode.window.showErrorMessage('No active editor.');
-            return;
-        }
-        if (activeTextEditor.document.isUntitled) {
-            vscode.window.showErrorMessage('Please save the file first.');
-            return;
-        }
-        if (activeTextEditor.document.isDirty) {
-            activeTextEditor.document.save();
-        }
         const position = activeTextEditor.selection.active;
         let fileName = activeTextEditor.document.fileName;
         let line = position.line+1
