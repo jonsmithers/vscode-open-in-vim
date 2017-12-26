@@ -42,6 +42,9 @@ function openInVim() {
         vscode.window.showErrorMessage('Please save the file first.');
         return;
     }
+    if (activeTextEditor.document.isDirty) {
+        activeTextEditor.document.save();
+    }
     const position = activeTextEditor.selection.active;
     let fileName = activeTextEditor.document.fileName;
     let line = position.line+1
