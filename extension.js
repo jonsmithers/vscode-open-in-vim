@@ -1,6 +1,8 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
+const fs = require('fs');
+const tmp = require('tmp');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -54,30 +56,42 @@ function openInVim() {
         vscode.window.showErrorMessage(`Check your settings. Method "${openMethod}" is not supported. Currently, you can use ${availableMethods}.`);
         return;
     }
-    actualOpenMethod();
+
+    let workspace = vscode.workspace.getWorkspaceFolder(activeTextEditor.document.uri);
+    if (!workspace) {
+        // user opened a file outside of any workspace
+        workspace = vscode.workspace.workspaceFolders[0]
+        vscode.window.showWarningMessage(`Defaulting workspace to ${workspace.name}`);
+    }
+    let workspacePath = workspace.uri.path;
+
+    let position = activeTextEditor.selection.active;
+    let fileName = activeTextEditor.document.fileName;
+    let line = position.line+1
+    let column = position.character+1
+    let vimCommand = `vim '${fileName}' '+call cursor(${line}, ${column})'; exit` // cannot contain double quotes
+
+    actualOpenMethod({workspacePath, vimCommand});
 }
 
 const openMethods = {
-    "osx.iterm": function() {
-        let activeTextEditor = vscode.window.activeTextEditor;
-        const position = activeTextEditor.selection.active;
-        let fileName = activeTextEditor.document.fileName;
-        let line = position.line+1
-        let column = position.character+1
-        let workspace = vscode.workspace.getWorkspaceFolder(activeTextEditor.document.uri);
-        if (!workspace) {
-            // user opened a file outside of any workspace
-            workspace = vscode.workspace.workspaceFolders[0]
-            vscode.window.showWarningMessage(`Defaulting workspace to ${workspace.name}`);
-        }
-        let workspacePath = workspace.uri.path;
+    "integrated-terminal": function({workspacePath, vimCommand}) {
+        let tmpFile = tmp.fileSync();
+        fs.writeFileSync(tmpFile.name, `
+            cd ${workspacePath}
+            ${vimCommand}
+        `);
+        let terminal = vscode.window.createTerminal({name: "HAI", shellPath: "/bin/bash", shellArgs: [tmpFile.name]});
+        vscode.commands.executeCommand("workbench.action.terminal.focus");
+    },
+    "osx.iterm": function({workspacePath, vimCommand}) {
         // let extensionPath = vscode.extensions.all.find(e => e.id.includes("open-in-vim")).extensionPath;
         let osascriptcode = `
             tell application "iTerm"
               set myNewWin to create window with default profile
               tell current session of myNewWin
                 write text "cd '${workspacePath}'"
-                write text "vim '${fileName}' '+call cursor(${line}, ${column})'; exit"
+                write text "${vimCommand}"
               end tell
             end tell
         `;
