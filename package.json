@@ -3,7 +3,7 @@
     "displayName": "Open in Vim",
     "description": "Opens current file in vim",
     "repository":  "github:jonsmithers/vscode-open-in-vim.git",
-    "version": "0.0.3",
+    "version": "0.1.0",
     "publisher": "jonsmithers",
     "engines": {
         "vscode": "^1.19.0"
