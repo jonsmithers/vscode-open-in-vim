@@ -24,6 +24,15 @@ Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 - support linux!
 - support neovim?
 
+## Inverse Plugin
+
+If you'd like the inverse of this plugin (*Open in VSCode from Vim*), you can
+just add the following vimrc line:
+
+```
+:command! VSCode exe "silent !code --goto %:" . line(".") . ":" . col(".") | redraw!
+```
+
 ## Known Issues
 
 VSCode doesn't automatically refresh its editor when changes are made to the
