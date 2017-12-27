@@ -82,6 +82,7 @@ const openMethods = {
             ${vimCommand}
         `);
         let terminal = vscode.window.createTerminal({name: "Open in Vim", shellPath: "/bin/bash", shellArgs: [tmpFile.name]});
+        terminal.show(true);
         vscode.commands.executeCommand("workbench.action.terminal.focus");
     },
     "osx.iterm": function({workspacePath, vimCommand}) {
