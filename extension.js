@@ -59,11 +59,20 @@ function openInVim() {
 
     let workspace = vscode.workspace.getWorkspaceFolder(activeTextEditor.document.uri);
     if (!workspace) {
-        // user opened a file outside of any workspace
-        workspace = vscode.workspace.workspaceFolders[0]
-        vscode.window.showWarningMessage(`Defaulting workspace to ${workspace.name}`);
+        // current file doesn't belong to any open workspace
+        if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length) {
+            // default to first available workspace
+            workspace = vscode.workspace.workspaceFolders[0]
+            vscode.window.showWarningMessage(`Defaulting vim cwd to ${workspace.name}`);
+            var workspacePath = workspace.uri.path;
+        } else {
+            // NO workspaces are open, so just use home
+            vscode.window.showWarningMessage(`Defaulting vim cwd to HOME`);
+            var workspacePath = process.env.HOME;
+        }
+    } else {
+        var workspacePath = workspace.uri.path;
     }
-    let workspacePath = workspace.uri.path;
 
     let position = activeTextEditor.selection.active;
     let fileName = activeTextEditor.document.fileName;
