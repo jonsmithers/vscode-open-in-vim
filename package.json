@@ -30,6 +30,7 @@
                 "open-in-vim.openMethod": {
                     "type": "string",
                     "enum": [
+                        "gvim",
                         "integrated-terminal",
                         "osx.iterm",
                         "osx.macvim"

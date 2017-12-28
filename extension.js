@@ -75,6 +75,13 @@ function openInVim() {
 }
 
 const openMethods = {
+    "gvim": function({workspacePath, vimCommand}) {
+        vimCommand = "g" + vimCommand; // use "gvim"
+        require('child_process').execSync(vimCommand, {
+            cwd: workspacePath,
+            encoding: "utf8"
+        });
+    },
     "integrated-terminal": function({workspacePath, vimCommand}) {
         let tmpFile = tmp.fileSync();
         fs.writeFileSync(tmpFile.name, `
