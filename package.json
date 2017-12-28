@@ -5,6 +5,7 @@
     "repository":  "github:jonsmithers/vscode-open-in-vim",
     "version": "0.1.0",
     "publisher": "jonsmithers",
+    "license": "MIT",
     "engines": {
         "vscode": "^1.19.0"
     },
