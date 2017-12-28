@@ -3,7 +3,7 @@
 Open current file in vim. To activate this extension, press Cmd+Shift+P and
 search for "Open in Vim" (alternatively, assign a Keyboard Shortcut).
 
-Windows is not supported. This has not been tested on linux yet.
+Windows is not supported.
 
 Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 
@@ -21,7 +21,6 @@ Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 
 - support gVim!
 - support OSX's native Terminal app
-- support linux!
 - support neovim?
 
 ## Inverse Plugin
@@ -35,5 +34,6 @@ just add the following vimrc line:
 
 ## Known Issues
 
-VSCode doesn't automatically refresh its editor when changes are made to the
-underlying file. Not sure how to address this yet.
+On Mac, VSCode doesn't automatically refresh its editor when changes are made
+to the underlying file (but it _does_ on Linux). Not sure how to address this
+yet.
