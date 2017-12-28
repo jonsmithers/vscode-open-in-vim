@@ -2,7 +2,7 @@
     "name": "open-in-vim",
     "displayName": "Open in Vim",
     "description": "Opens current file in vim",
-    "repository":  "github:jonsmithers/vscode-open-in-vim.git",
+    "repository":  "github:jonsmithers/vscode-open-in-vim",
     "version": "0.1.0",
     "publisher": "jonsmithers",
     "engines": {
