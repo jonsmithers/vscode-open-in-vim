@@ -3,9 +3,13 @@ All notable changes to the "open-in-vim" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.2.1]
+### Added
+- Icon
+
 ## [0.2.0]
 ### Added
-- Add configuration option to use gVim
+- Introduce gVim support
 
 ### Fixed
 - Fix error caused by having 0 workspaces open
