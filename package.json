@@ -52,6 +52,7 @@
         "eslint": "^4.6.1",
         "typescript": "^2.6.1"
     },
+    "icon": "images/icon.png",
     "dependencies": {
         "tmp": "^0.0.33",
         "vscode": "^1.1.6"
