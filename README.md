@@ -20,7 +20,6 @@ Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 
 ## To do
 
-- support gVim!
 - support OSX's native Terminal app
 - support neovim?
 
