@@ -32,8 +32,8 @@
                     "enum": [
                         "gvim",
                         "integrated-terminal",
-                        "osx.iterm",
-                        "osx.macvim"
+                        "macos.iterm",
+                        "macos.macvim"
                     ],
                     "scope": "resource",
                     "default": "integrated-terminal",

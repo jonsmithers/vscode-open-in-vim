@@ -34,8 +34,24 @@ function deactivate() {
 }
 exports.deactivate = deactivate;
 
+function getConfiguration() {
+    let configuration = vscode.workspace.getConfiguration()["open-in-vim"]
+
+    let openMethodLegacyAliases = [
+        ["osx.iterm",  "macos.iterm"],
+        ["osx.macvim", "macos.macvim"]
+    ];
+    for (let [legacyValue, newValue] of openMethodLegacyAliases) {
+        if (configuration.openMethod == legacyValue) {
+            configuration.openMethod = newValue;
+        }
+    }
+
+    return configuration
+}
+
 function openInVim() {
-    let {openMethod} = vscode.workspace.getConfiguration()["open-in-vim"]
+    let {openMethod} = getConfiguration()
 
     let activeTextEditor = vscode.window.activeTextEditor;
     if (!activeTextEditor) {
@@ -101,7 +117,7 @@ const openMethods = {
         terminal.show(true);
         vscode.commands.executeCommand("workbench.action.terminal.focus");
     },
-    "osx.iterm": function({workspacePath, vimCommand}) {
+    "macos.iterm": function({workspacePath, vimCommand}) {
         // let extensionPath = vscode.extensions.all.find(e => e.id.includes("open-in-vim")).extensionPath;
         let osascriptcode = `
             tell application "iTerm"
@@ -115,7 +131,7 @@ const openMethods = {
         let result = require('child_process').spawnSync("/usr/bin/osascript", {encoding: "utf8", input: osascriptcode})
         // check for errors here?
     },
-    "osx.macvim": function({workspacePath, vimCommand}) {
+    "macos.macvim": function({workspacePath, vimCommand}) {
         vimCommand = "m" + vimCommand; // use "mvim"
         require('child_process').execSync(vimCommand, {
             cwd: workspacePath,

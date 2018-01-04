@@ -15,13 +15,16 @@ Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 | --------------------- | --------------------------------------------------- |
 | `gvim`                | Open in gVim.                                       |
 | `integrated-terminal` | (DEFAULT) Open vim in VSCode's integrated terminal. |
-| `osx.iterm`           | Open vim in iTerm2.                                 |
-| `osx.macvim`          | Open in MacVim.                                     |
+| `macos.iterm`         | Open vim in iTerm2.                                 |
+| `macos.macvim`        | Open in MacVim.                                     |
+
+`osx.iterm` and `osx.macvim` are legacy values that still work.
 
 ## To do
 
-- support OSX's native Terminal app
-- support neovim?
+- support macOS' native Terminal app
+- support native terminal on linux
+- maybe add option for custom iTerm profile
 
 ## Inverse Plugin
 
