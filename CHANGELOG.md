@@ -3,10 +3,10 @@ All notable changes to the "open-in-vim" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [unreleased]
+## [0.3.0]
 ### Fixed
-- Harmless cwd warning message is now an auto-dismissing statusbar message. User no longer has to click "close" on it.
-- "osx.iterm" and "osx.macvim" are renamed to "macos.iterm" and "macos.macvim". Legacy values still work.
+- Rename `osx.iterm` and `osx.macvim` to `macos.iterm` and `macos.macvim` respectively. Legacy values still work.
+- Downplay annoying warning regarding vim cwd to just a status bar message so user doesn't have to click to close.
 
 ## [0.2.1]
 ### Added
