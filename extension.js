@@ -63,11 +63,11 @@ function openInVim() {
         if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length) {
             // default to first available workspace
             workspace = vscode.workspace.workspaceFolders[0]
-            vscode.window.showWarningMessage(`Defaulting vim cwd to ${workspace.name}`);
+            vscode.window.setStatusBarMessage(`OpenInVim defaulted vim working dir to ${workspace.name}`, 5000);
             var workspacePath = workspace.uri.path;
         } else {
             // NO workspaces are open, so just use home
-            vscode.window.showWarningMessage(`Defaulting vim cwd to HOME`);
+            vscode.window.setStatusBarMessage(`OpenInVim defaulted vim working dir to HOME`, 5000);
             var workspacePath = process.env.HOME;
         }
     } else {
