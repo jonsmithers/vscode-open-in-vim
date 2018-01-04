@@ -37,9 +37,3 @@ just add the following vimrc line:
 
 (On Mac, you'll also need to open vscode and run the command `Install 'code'
 command in PATH`)
-
-## Known Issues
-
-On Mac, VSCode doesn't automatically refresh its editor when changes are made
-to the underlying file (but it _does_ on Linux). Not sure how to address this
-yet.
