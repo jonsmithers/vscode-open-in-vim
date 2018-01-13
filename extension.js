@@ -121,7 +121,8 @@ const openMethods = {
         vscode.commands.executeCommand("workbench.action.terminal.focus");
     },
     "linux.gnome-terminal": function({getScript}) {
-        let gnomeTerminalCommand = "gnome-terminal --hide-menubar --full-screen" + ` --command='bash ${getScript()}'`
+        let args = getConfiguration().linux['gnome-terminal'].args;
+        let gnomeTerminalCommand = `gnome-terminal ${args} --command='bash ${getScript()}'`
         require('child_process').execSync(gnomeTerminalCommand);
     },
     "macos.iterm": function({workspacePath, vimCommand}) {

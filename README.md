@@ -21,6 +21,12 @@ Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 
 `osx.iterm` and `osx.macvim` are legacy values that still work.
 
+### `open-in-vim.linux.gnome-terminal.args`
+
+Default: `--hide-menubar --full-screen`
+
+These these are space-separated arguments passed to `gnome-terminal`.
+
 ## To do
 
 - support macOS' native Terminal app

@@ -39,6 +39,12 @@
                     "scope": "resource",
                     "default": "integrated-terminal",
                     "description": "Determines how vim gets launched"
+                },
+                "open-in-vim.linux.gnome-terminal.args": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "--hide-menubar --full-screen",
+                    "description": "Extra args to use with gnome-terminal"
                 }
             }
         }
