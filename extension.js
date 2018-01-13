@@ -95,8 +95,16 @@ function openInVim() {
     let line = position.line+1
     let column = position.character+1
     let vimCommand = `vim '${fileName}' '+call cursor(${line}, ${column})'; exit` // cannot contain double quotes
+    let getScript = () => {
+        let tmpFile = tmp.fileSync();
+        fs.writeFileSync(tmpFile.name, `
+            cd ${workspacePath}
+            ${vimCommand}
+        `);
+        return tmpFile.name;
+    }
 
-    actualOpenMethod({workspacePath, vimCommand});
+    actualOpenMethod({workspacePath, vimCommand, getScript});
 }
 
 const openMethods = {
@@ -107,15 +115,14 @@ const openMethods = {
             encoding: "utf8"
         });
     },
-    "integrated-terminal": function({workspacePath, vimCommand}) {
-        let tmpFile = tmp.fileSync();
-        fs.writeFileSync(tmpFile.name, `
-            cd ${workspacePath}
-            ${vimCommand}
-        `);
-        let terminal = vscode.window.createTerminal({name: "Open in Vim", shellPath: "/bin/bash", shellArgs: [tmpFile.name]});
+    "integrated-terminal": function({getScript}) {
+        let terminal = vscode.window.createTerminal({name: "Open in Vim", shellPath: "/bin/bash", shellArgs: [getScript()]});
         terminal.show(true);
         vscode.commands.executeCommand("workbench.action.terminal.focus");
+    },
+    "linux.gnome-terminal": function({getScript}) {
+        let gnomeTerminalCommand = "gnome-terminal --hide-menubar --full-screen" + ` --command='bash ${getScript()}'`
+        require('child_process').execSync(gnomeTerminalCommand);
     },
     "macos.iterm": function({workspacePath, vimCommand}) {
         // let extensionPath = vscode.extensions.all.find(e => e.id.includes("open-in-vim")).extensionPath;

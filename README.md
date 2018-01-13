@@ -11,12 +11,13 @@ Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 
 ### `open-in-vim.openMethod`
 
-| value                 | description                                         |
-| --------------------- | --------------------------------------------------- |
-| `gvim`                | Open in gVim.                                       |
-| `integrated-terminal` | (DEFAULT) Open vim in VSCode's integrated terminal. |
-| `macos.iterm`         | Open vim in iTerm2.                                 |
-| `macos.macvim`        | Open in MacVim.                                     |
+| value                  | description                                           |
+| ---------------------- | ----------------------------------------------------- |
+| `gvim`                 | Open in gVim.                                         |
+| `integrated-terminal`  | (DEFAULT) Open vim in VSCode's integrated terminal.   |
+| `linux.gnome-terminal` | Open vim in gnome-terminal (full-screen).             |
+| `macos.iterm`          | Open vim in iTerm2.                                   |
+| `macos.macvim`         | Open in MacVim.                                       |
 
 `osx.iterm` and `osx.macvim` are legacy values that still work.
 
