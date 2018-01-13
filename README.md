@@ -22,7 +22,7 @@ Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 
 `osx.iterm` and `osx.macvim` are legacy values that still work.
 
-### Other Options
+### Other Settings
 
 | value                                   | default                        | description                                                    |
 | --------------------------------------- | ------------------------------ | -------------------------------------------------------------- |
@@ -32,7 +32,6 @@ Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 ## To do
 
 - support macOS' native Terminal app
-- support native terminal on linux
 - maybe add option for custom iTerm profile
 
 ## Inverse Plugin
