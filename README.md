@@ -33,7 +33,6 @@ Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 ## To do
 
 - support macOS' native Terminal app
-- maybe add option for custom iTerm profile
 
 ## Inverse Plugin
 
