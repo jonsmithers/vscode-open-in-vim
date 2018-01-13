@@ -127,14 +127,21 @@ const openMethods = {
         require('child_process').execSync(tilixCommand);
     },
     "macos.iterm": function({getScript}) {
+        let profile = getConfiguration().macos.iterm.profile;
+        if (profile !== "default profile") {
+            profile = `profile "${profile}"`
+        }
         let osascriptcode = `
             tell application "iTerm"
-              set myNewWin to create window with default profile command "bash ${getScript()}"
+              set myNewWin to create window with ${profile} command "bash ${getScript()}"
             end tell
         `;
         let result = require('child_process').spawnSync("/usr/bin/osascript", {encoding: "utf8", input: osascriptcode})
         if (result.error) {
             throw result.error;
+        }
+        if (result.stderr) {
+            throw result.stderr;
         }
     },
     "macos.macvim": function({workspacePath, vimCommand}) {

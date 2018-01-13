@@ -24,10 +24,11 @@ Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 
 ### Other Settings
 
-| value                                   | default                        | description                                                    |
-| --------------------------------------- | ------------------------------ | -------------------------------------------------------------- |
-| `open-in-vim.linux.gnome-terminal.args` | `--hide-menubar --full-screen` | Space-separated arguments that get passed to `gnome-terminal`. |
-| `open-in-vim.linux.tilix.args`          | `--full-screen` | Space-separated arguments that get passed to `tilix`. |
+| value                                   | default                        | description                                                                               |
+| --------------------------------------- | ------------------------------ | ----------------------------------------------------------------------------------------- |
+| `open-in-vim.linux.gnome-terminal.args` | `--hide-menubar --full-screen` | Space-separated arguments that get passed to `gnome-terminal`.                            |
+| `open-in-vim.linux.tilix.args`          | `--full-screen`                | Space-separated arguments that get passed to `tilix`.                                     |
+| `open-in-vim.macos.iterm.profile`       | `default profile`              | Name of iTerm profile to use (`default profile` is a special case to use iTerm's default) |
 
 ## To do
 
