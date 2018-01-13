@@ -8,10 +8,6 @@ const tmp = require('tmp');
 // your extension is activated the very first time the command is executed
 function activate(context) {
 
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "open-in-vim" is now active!');
-
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
@@ -124,6 +120,11 @@ const openMethods = {
         let args = getConfiguration().linux['gnome-terminal'].args;
         let gnomeTerminalCommand = `gnome-terminal ${args} --command='bash ${getScript()}'`
         require('child_process').execSync(gnomeTerminalCommand);
+    },
+    "linux.tilix": function({getScript}) {
+        let args = getConfiguration().linux.tilix.args;
+        let tilixCommand = `tilix ${args} --command='bash ${getScript()}'`
+        require('child_process').execSync(tilixCommand);
     },
     "macos.iterm": function({workspacePath, vimCommand}) {
         // let extensionPath = vscode.extensions.all.find(e => e.id.includes("open-in-vim")).extensionPath;

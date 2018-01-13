@@ -11,21 +11,23 @@ Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 
 ### `open-in-vim.openMethod`
 
-| value                  | description                                           |
-| ---------------------- | ----------------------------------------------------- |
-| `gvim`                 | Open in gVim.                                         |
-| `integrated-terminal`  | (DEFAULT) Open vim in VSCode's integrated terminal.   |
-| `linux.gnome-terminal` | Open vim in gnome-terminal (full-screen).             |
-| `macos.iterm`          | Open vim in iTerm2.                                   |
-| `macos.macvim`         | Open in MacVim.                                       |
+| value                  | description                                               |
+| ---------------------- | --------------------------------------------------------- |
+| `gvim`                 | Open in gVim.                                             |
+| `integrated-terminal`  | (DEFAULT) Open vim in VSCode's integrated terminal.       |
+| `linux.gnome-terminal` | Open vim in gnome-terminal (full-screen).                 |
+| `linux.tilix`          | Open vim in [Tilix](https://gnunn1.github.io/tilix-web/). |
+| `macos.iterm`          | Open vim in iTerm2.                                       |
+| `macos.macvim`         | Open in MacVim.                                           |
 
 `osx.iterm` and `osx.macvim` are legacy values that still work.
 
-### `open-in-vim.linux.gnome-terminal.args`
+### Other Options
 
-Default: `--hide-menubar --full-screen`
-
-These these are space-separated arguments passed to `gnome-terminal`.
+| value                                   | default                        | description                                                    |
+| --------------------------------------- | ------------------------------ | -------------------------------------------------------------- |
+| `open-in-vim.linux.gnome-terminal.args` | `--hide-menubar --full-screen` | Space-separated arguments that get passed to `gnome-terminal`. |
+| `open-in-vim.linux.tilix.args`          | `--full-screen` | Space-separated arguments that get passed to `tilix`. |
 
 ## To do
 

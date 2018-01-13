@@ -33,6 +33,7 @@
                         "gvim",
                         "integrated-terminal",
                         "linux.gnome-terminal",
+                        "linux.tilix",
                         "macos.iterm",
                         "macos.macvim"
                     ],
@@ -45,6 +46,12 @@
                     "scope": "resource",
                     "default": "--hide-menubar --full-screen",
                     "description": "Extra args to use with gnome-terminal"
+                },
+                "open-in-vim.linux.tilix.args": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "--full-screen",
+                    "description": "Extra args to use with tilix"
                 }
             }
         }
