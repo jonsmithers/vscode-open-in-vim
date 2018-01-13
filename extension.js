@@ -138,7 +138,9 @@ const openMethods = {
             end tell
         `;
         let result = require('child_process').spawnSync("/usr/bin/osascript", {encoding: "utf8", input: osascriptcode})
-        // check for errors here?
+        if (result.error) {
+            throw result.error;
+        }
     },
     "macos.macvim": function({workspacePath, vimCommand}) {
         vimCommand = "m" + vimCommand; // use "mvim"
