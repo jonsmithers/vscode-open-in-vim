@@ -41,7 +41,7 @@ If you'd like the inverse of this plugin (*Open in VSCode from Vim*), you can
 just add the following vimrc line:
 
 ```
-:command! OpenInVSCode exe "silent !code --goto %:" . line(".") . ":" . col(".") | redraw!
+:command! OpenInVSCode exe "silent !code --goto '%:" . line(".") . ":" . col(".") . "'" | redraw!
 ```
 
 (On Mac, you'll also need to open vscode and run the command `Install 'code'
