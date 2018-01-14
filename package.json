@@ -52,6 +52,12 @@
                     "scope": "resource",
                     "default": "--full-screen",
                     "description": "Extra args to use with tilix"
+                },
+                "open-in-vim.macos.iterm.profile": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "default profile",
+                    "description": "Profile to use for iterm window"
                 }
             }
         }

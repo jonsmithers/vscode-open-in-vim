@@ -126,20 +126,22 @@ const openMethods = {
         let tilixCommand = `tilix ${args} --command='bash ${getScript()}'`
         require('child_process').execSync(tilixCommand);
     },
-    "macos.iterm": function({workspacePath, vimCommand}) {
-        // let extensionPath = vscode.extensions.all.find(e => e.id.includes("open-in-vim")).extensionPath;
+    "macos.iterm": function({getScript}) {
+        let profile = getConfiguration().macos.iterm.profile;
+        if (profile !== "default profile") {
+            profile = `profile "${profile}"`
+        }
         let osascriptcode = `
             tell application "iTerm"
-              set myNewWin to create window with default profile
-              tell current session of myNewWin
-                write text "cd '${workspacePath}'"
-                write text "${vimCommand}"
-              end tell
+              set myNewWin to create window with ${profile} command "bash ${getScript()}"
             end tell
         `;
         let result = require('child_process').spawnSync("/usr/bin/osascript", {encoding: "utf8", input: osascriptcode})
         if (result.error) {
             throw result.error;
+        }
+        if (result.stderr) {
+            throw result.stderr;
         }
     },
     "macos.macvim": function({workspacePath, vimCommand}) {
