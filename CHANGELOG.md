@@ -3,6 +3,12 @@ All notable changes to the "open-in-vim" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.4.0]
+### Added
+- Introduce Gnome Terminal support
+- Introduce Tilix support
+- Add option to customize iTerm profile
+
 ## [0.3.0]
 ### Fixed
 - Rename `osx.iterm` and `osx.macvim` to `macos.iterm` and `macos.macvim` respectively. Legacy values still work.
