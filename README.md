@@ -45,3 +45,9 @@ just add the following vimrc line:
 
 (On Mac, you'll also need to open vscode and run the command `Install 'code'
 command in PATH`)
+
+If you additionally want to preserve the working directory, you can add `getcwd()` like so:
+
+```
+:command! OpenCwdInVSCode exe "silent !code '" . getcwd() . "' --goto '%:" . line(".") . ":" . col(".") . "'" | redraw!
+```
