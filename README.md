@@ -40,7 +40,7 @@ If you'd like the inverse of this plugin (*Open in VSCode from Vim*), you can
 just add the following vimrc line:
 
 ```
-:command! OpenInVSCode exe "silent !code --goto '%:" . line(".") . ":" . col(".") . "'" | redraw!
+:command! OpenInVSCode exe "silent !code --goto '" . fnamemodify(expand("%"), "") . ":" . line(".") . ":" . col(".") . "'" | redraw!
 ```
 
 (On Mac, you'll also need to open vscode and run the command `Install 'code'
@@ -49,5 +49,5 @@ command in PATH`)
 If you additionally want to preserve the working directory, you can add `getcwd()` like so:
 
 ```
-:command! OpenCwdInVSCode exe "silent !code '" . getcwd() . "' --goto '%:" . line(".") . ":" . col(".") . "'" | redraw!
+:command! OpenCwdInVSCode exe "silent !code '" . getcwd() . "' --goto '" . fnamemodify(expand("%"), "") . ":" . line(".") . ":" . col(".") . "'" | redraw!
 ```
