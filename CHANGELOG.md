@@ -3,6 +3,10 @@ All notable changes to the "open-in-vim" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [unreleased]
+### Fixed
+- Fix issue in reverse-plugin vim commands when line number starts with "8"
+
 ## [0.4.0]
 ### Added
 - Introduce Gnome Terminal support
