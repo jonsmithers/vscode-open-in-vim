@@ -75,6 +75,6 @@
     "icon": "images/icon.png",
     "dependencies": {
         "tmp": "^0.0.33",
-        "vscode": "^1.1.6"
+        "vscode": "^1.1.17"
     }
 }
