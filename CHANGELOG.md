@@ -6,6 +6,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [unreleased]
 ### Fixed
 - Fix issue in reverse-plugin vim commands when line number starts with "8"
+- Update vscode module to address https://github.com/Microsoft/vscode-extension-vscode/issues/106, https://nvd.nist.gov/vuln/detail/CVE-2018-3728
 
 ## [0.4.0]
 ### Added
