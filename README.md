@@ -1,7 +1,10 @@
 # Open in Vim
 
-Open current file in vim. To activate this extension, press Cmd+Shift+P and
-search for "Open in Vim" (alternatively, assign a Keyboard Shortcut).
+Open current file in vim. To activate this extension, open the [Command
+Palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette)
+(Ctrl+Shift+P on linux or ⇧⌘P on mac) and search for "Open in Vim".
+Alternatively, you can [assign a keyboard shortcut of your
+choosing](https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-editor).
 
 Windows is not supported.
 
