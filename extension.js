@@ -3,6 +3,8 @@
 const vscode = require('vscode');
 const fs = require('fs');
 const tmp = require('tmp');
+const os = require('os');
+const opn = require('opn');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -13,11 +15,26 @@ function activate(context) {
     // The commandId parameter must match the command field in package.json
     let disposable = vscode.commands.registerCommand('open-in-vim.open', function() {
         try {
+            if (os.type().startsWith('Windows')) {
+                const githubButton = 'View GitHub issue';
+                const otherPluginButton = 'View alternative plugin';
+                return vscode.window.showErrorMessage(`Windows isn't supported yet. ლ(ಠ_ಠლ)`, otherPluginButton, githubButton).then((choice) => {
+                    switch(choice) {
+                        case githubButton: {
+                            opn("https://github.com/jonsmithers/vscode-open-in-vim/issues/2")
+                            break;
+                        }
+                        case otherPluginButton: {
+                            opn("https://marketplace.visualstudio.com/items?itemName=mattn.OpenVim")
+                            break;
+                        }
+                    }
+                });
+            }
             openInVim();
         } catch(e) {
             console.error(e);
-            vscode.window.showErrorMessage("extension experienced internal error" + e); // ?? not sure this works
-            throw e;
+            vscode.window.showErrorMessage("Open in Vim failed: " + e);
         }
     });
 

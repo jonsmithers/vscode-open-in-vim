@@ -74,6 +74,7 @@
     },
     "icon": "images/icon.png",
     "dependencies": {
+        "opn": "^5.4.0",
         "tmp": "^0.0.33",
         "vscode": "^1.1.17"
     }
