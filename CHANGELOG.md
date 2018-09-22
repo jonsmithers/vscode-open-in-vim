@@ -3,6 +3,10 @@ All notable changes to the "open-in-vim" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.4.2]
+### Fixed
+- Show helpful info for people who try to use this on Windows
+
 ## [0.4.1]
 ### Fixed
 - Fix issue in reverse-plugin vim commands when line number starts with "8"
