@@ -5,7 +5,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.4.3]
 ### Fixed
-- Upgrade vscode module to address https://github.com/dominictarr/event-stream/issues/116
+- Upgrade vscode module to address [event-stream security
+  issue](https://github.com/dominictarr/event-stream/issues/116). Along with
+  many others, vscode flagged this plugin as "problematic" and automatically
+  uninstalled it. ([blog post link
+  here](https://code.visualstudio.com/blogs/2018/11/26/event-stream))
 
 ## [0.4.2]
 ### Fixed
