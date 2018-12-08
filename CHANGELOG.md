@@ -3,6 +3,10 @@ All notable changes to the "open-in-vim" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.4.3]
+### Fixed
+- Upgrade vscode module to address https://github.com/dominictarr/event-stream/issues/116
+
 ## [0.4.2]
 ### Fixed
 - Show helpful info for people who try to use this on Windows
@@ -10,7 +14,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [0.4.1]
 ### Fixed
 - Fix issue in reverse-plugin vim commands when line number starts with "8"
-- Update vscode module to address https://github.com/Microsoft/vscode-extension-vscode/issues/106, https://nvd.nist.gov/vuln/detail/CVE-2018-3728
+- Upgrade vscode module to address https://github.com/Microsoft/vscode-extension-vscode/issues/106, https://nvd.nist.gov/vuln/detail/CVE-2018-3728
 
 ## [0.4.0]
 ### Added
