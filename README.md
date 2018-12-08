@@ -35,7 +35,12 @@ Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 
 ## To do
 
-- support macOS' native Terminal app
+- [ ] Add option to move the vscode cursor to wherever user left off in vim.
+      This could be accomplished by added the following argument to vim:
+      `"+autocmd VimLeavePre * execute '!code ' . expand('%') . ':' . line('.')
+      . ':' . col('.')"`. This assumes that `code` is in _$PATH_.
+- [ ] Support macOS' native Terminal app
+
 
 ## Inverse Plugin
 
