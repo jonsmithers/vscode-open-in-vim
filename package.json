@@ -82,7 +82,8 @@
     },
     "icon": "images/icon.png",
     "dependencies": {
-        "opn": "^5.4.0",
+        "@types/tmp": "^0.1.0",
+        "opn": "^5.5.0",
         "tmp": "^0.0.33",
         "vscode": "^1.1.26"
     }

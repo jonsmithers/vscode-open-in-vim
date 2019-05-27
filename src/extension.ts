@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-const fs = require('fs');
-const tmp = require('tmp');
-const os = require('os');
-const opn = require('opn');
+import * as fs from 'fs';
+import * as tmp from 'tmp';
+import * as os from 'os';
+import * as opn from 'opn';
 
 /*
  * Called when extension is activated. This happens the very first time the
@@ -137,7 +137,7 @@ function openInVim() {
         return tmpFile.name;
     }
 
-    actualOpenMethod({workspacePath, vimCommand, getScript});
+    actualOpenMethod({ workspacePath, vimCommand, getScript });
 }
 
 type OpenMethodKey = 'gvim' | 'integrated-terminal' | 'linux.gnome-terminal' | 'linux.tilix' | 'macos.iterm' | 'macos.macvim';
