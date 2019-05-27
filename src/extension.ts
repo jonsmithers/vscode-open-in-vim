@@ -152,7 +152,7 @@ type OpenMethods = {
 
 const openMethods: OpenMethods = {
     "gvim": function({workspacePath, vimCommand}: OpenMethodsArgument) {
-        vimCommand = "g" + vimCommand; // use "gvim"
+        vimCommand = vimCommand.replace(/^vim|^nvim/, 'gvim');
         require('child_process').execSync(vimCommand, {
             cwd: workspacePath,
             encoding: "utf8"
@@ -192,7 +192,7 @@ const openMethods: OpenMethods = {
         }
     },
     "macos.macvim": function({workspacePath, vimCommand}: OpenMethodsArgument) {
-        vimCommand = "m" + vimCommand; // use "mvim"
+        vimCommand = vimCommand.replace(/^vim|^nvim/, 'mvim');
         require('child_process').execSync(vimCommand, {
             cwd: workspacePath,
             encoding: "utf8"
