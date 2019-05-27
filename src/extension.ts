@@ -4,9 +4,9 @@ const tmp = require('tmp');
 const os = require('os');
 const opn = require('opn');
 
-/* 
+/*
  * Called when extension is activated. This happens the very first time the
- * command is executed 
+ * command is executed
  */
 export function activate(context: vscode.ExtensionContext) {
 
@@ -42,13 +42,31 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(disposable);
 }
 
-/* 
- * Called when extension is deactivated 
+/*
+ * Called when extension is deactivated
  */
 export function deactivate() {
 }
 
-function getConfiguration() {
+type Config = {
+    openMethod: OpenMethodKey;
+    useNeovim: boolean;
+    restoreCursorAfterVim: boolean;
+    linux?: {
+        'gnome-terminal'?: {
+            args: string
+        };
+        tilix?: {
+            args: string
+        };
+    },
+    macos?: {
+        iterm: {
+            profile: string;
+        }
+    }
+}
+function getConfiguration(): Config {
     let configuration = vscode.workspace.getConfiguration()["open-in-vim"]
 
     let openMethodLegacyAliases = [
@@ -65,7 +83,7 @@ function getConfiguration() {
 }
 
 function openInVim() {
-    const openMethod: OpenMethodKey = getConfiguration().openMethod;
+    const { openMethod, useNeovim } = getConfiguration();
 
     let activeTextEditor = vscode.window.activeTextEditor;
     if (!activeTextEditor) {
@@ -109,7 +127,7 @@ function openInVim() {
     let fileName = activeTextEditor.document.fileName;
     let line = position.line+1
     let column = position.character+1
-    let vimCommand = `vim '${fileName}' '+call cursor(${line}, ${column})'; exit` // cannot contain double quotes
+    let vimCommand = `${useNeovim ? 'nvim' : 'vim'} '${fileName}' '+call cursor(${line}, ${column})'; exit` // cannot contain double quotes
     let getScript = () => {
         let tmpFile = tmp.fileSync();
         fs.writeFileSync(tmpFile.name, `
@@ -146,17 +164,17 @@ const openMethods: OpenMethods = {
         vscode.commands.executeCommand("workbench.action.terminal.focus");
     },
     "linux.gnome-terminal": function({getScript}: OpenMethodsArgument) {
-        let args = getConfiguration().linux['gnome-terminal'].args;
+        let args = getConfiguration().linux!['gnome-terminal']!.args;
         let gnomeTerminalCommand = `gnome-terminal ${args} --command='bash ${getScript()}'`
         require('child_process').execSync(gnomeTerminalCommand);
     },
     "linux.tilix": function({getScript}: OpenMethodsArgument) {
-        let args = getConfiguration().linux.tilix.args;
+        let args = getConfiguration().linux!.tilix!.args;
         let tilixCommand = `tilix ${args} --command='bash ${getScript()}'`
         require('child_process').execSync(tilixCommand);
     },
     "macos.iterm": function({getScript}: OpenMethodsArgument) {
-        let profile = getConfiguration().macos.iterm.profile;
+        let profile = getConfiguration().macos!.iterm!.profile;
         if (profile !== "default profile") {
             profile = `profile "${profile}"`
         }

@@ -41,6 +41,11 @@
                     "default": "integrated-terminal",
                     "description": "Determines how vim gets launched"
                 },
+                "open-in-vim.useNeovim": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Use Neovim instead of Vim (does not apply to gvim/macvim open method)"
+                },
                 "open-in-vim.linux.gnome-terminal.args": {
                     "type": "string",
                     "scope": "resource",
