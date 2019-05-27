@@ -1,24 +1,22 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-const vscode = require('vscode');
+import * as vscode from 'vscode';
 const fs = require('fs');
 const tmp = require('tmp');
 const os = require('os');
 const opn = require('opn');
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-function activate(context) {
+/* 
+ * Called when extension is activated. This happens the very first time the
+ * command is executed 
+ */
+export function activate(context: vscode.ExtensionContext) {
 
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with  registerCommand
-    // The commandId parameter must match the command field in package.json
+    // implements command declared in package.json file
     let disposable = vscode.commands.registerCommand('open-in-vim.open', function() {
         try {
             if (os.type().startsWith('Windows')) {
                 const githubButton = 'View GitHub issue';
                 const otherPluginButton = 'View alternative plugin';
-                return vscode.window.showErrorMessage(`Windows isn't supported yet. ლ(ಠ_ಠლ)`, otherPluginButton, githubButton).then((choice) => {
+                return vscode.window.showErrorMessage(`Windows isn't supported yet. ლ(ಠ_ಠლ)`, otherPluginButton, githubButton).then((choice?: string) => {
                     switch(choice) {
                         case githubButton: {
                             opn("https://github.com/jonsmithers/vscode-open-in-vim/issues/2")
@@ -26,6 +24,9 @@ function activate(context) {
                         }
                         case otherPluginButton: {
                             opn("https://marketplace.visualstudio.com/items?itemName=mattn.OpenVim")
+                            break;
+                        }
+                        default: {
                             break;
                         }
                     }
@@ -40,12 +41,12 @@ function activate(context) {
 
     context.subscriptions.push(disposable);
 }
-exports.activate = activate;
 
-// this method is called when your extension is deactivated
-function deactivate() {
+/* 
+ * Called when extension is deactivated 
+ */
+export function deactivate() {
 }
-exports.deactivate = deactivate;
 
 function getConfiguration() {
     let configuration = vscode.workspace.getConfiguration()["open-in-vim"]
@@ -64,7 +65,7 @@ function getConfiguration() {
 }
 
 function openInVim() {
-    let {openMethod} = getConfiguration()
+    const openMethod: OpenMethodKey = getConfiguration().openMethod;
 
     let activeTextEditor = vscode.window.activeTextEditor;
     if (!activeTextEditor) {
@@ -97,6 +98,7 @@ function openInVim() {
         } else {
             // NO workspaces are open, so just use home
             vscode.window.setStatusBarMessage(`OpenInVim defaulted vim working dir to HOME`, 5000);
+            if (!process.env.HOME) throw new Error('$HOME is not defined');
             var workspacePath = process.env.HOME;
         }
     } else {
@@ -120,30 +122,40 @@ function openInVim() {
     actualOpenMethod({workspacePath, vimCommand, getScript});
 }
 
-const openMethods = {
-    "gvim": function({workspacePath, vimCommand}) {
+type OpenMethodKey = 'gvim' | 'integrated-terminal' | 'linux.gnome-terminal' | 'linux.tilix' | 'macos.iterm' | 'macos.macvim';
+interface OpenMethodsArgument {
+    getScript: () => string;
+    vimCommand: string;
+    workspacePath: string;
+}
+type OpenMethods = {
+    [key in OpenMethodKey]: (a: OpenMethodsArgument) => void;
+}
+
+const openMethods: OpenMethods = {
+    "gvim": function({workspacePath, vimCommand}: OpenMethodsArgument) {
         vimCommand = "g" + vimCommand; // use "gvim"
         require('child_process').execSync(vimCommand, {
             cwd: workspacePath,
             encoding: "utf8"
         });
     },
-    "integrated-terminal": function({getScript}) {
+    "integrated-terminal": function({getScript}: OpenMethodsArgument) {
         let terminal = vscode.window.createTerminal({name: "Open in Vim", shellPath: "/bin/bash", shellArgs: [getScript()]});
         terminal.show(true);
         vscode.commands.executeCommand("workbench.action.terminal.focus");
     },
-    "linux.gnome-terminal": function({getScript}) {
+    "linux.gnome-terminal": function({getScript}: OpenMethodsArgument) {
         let args = getConfiguration().linux['gnome-terminal'].args;
         let gnomeTerminalCommand = `gnome-terminal ${args} --command='bash ${getScript()}'`
         require('child_process').execSync(gnomeTerminalCommand);
     },
-    "linux.tilix": function({getScript}) {
+    "linux.tilix": function({getScript}: OpenMethodsArgument) {
         let args = getConfiguration().linux.tilix.args;
         let tilixCommand = `tilix ${args} --command='bash ${getScript()}'`
         require('child_process').execSync(tilixCommand);
     },
-    "macos.iterm": function({getScript}) {
+    "macos.iterm": function({getScript}: OpenMethodsArgument) {
         let profile = getConfiguration().macos.iterm.profile;
         if (profile !== "default profile") {
             profile = `profile "${profile}"`
@@ -161,11 +173,11 @@ const openMethods = {
             throw result.stderr;
         }
     },
-    "macos.macvim": function({workspacePath, vimCommand}) {
+    "macos.macvim": function({workspacePath, vimCommand}: OpenMethodsArgument) {
         vimCommand = "m" + vimCommand; // use "mvim"
         require('child_process').execSync(vimCommand, {
             cwd: workspacePath,
             encoding: "utf8"
         });
-    }
+    },
 };
