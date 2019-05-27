@@ -46,6 +46,11 @@
                     "default": false,
                     "description": "Use Neovim instead of Vim (does not apply to gvim/macvim open method)"
                 },
+                "open-in-vim.restoreCursorAfterVim": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "(EXPERIMENTAL) Sync cursor position to vscode when vim quits"
+                },
                 "open-in-vim.linux.gnome-terminal.args": {
                     "type": "string",
                     "scope": "resource",

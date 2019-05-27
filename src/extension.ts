@@ -83,7 +83,7 @@ function getConfiguration(): Config {
 }
 
 function openInVim() {
-    const { openMethod, useNeovim } = getConfiguration();
+    const { openMethod, useNeovim, restoreCursorAfterVim } = getConfiguration();
 
     let activeTextEditor = vscode.window.activeTextEditor;
     if (!activeTextEditor) {
@@ -127,7 +127,8 @@ function openInVim() {
     let fileName = activeTextEditor.document.fileName;
     let line = position.line+1
     let column = position.character+1
-    let vimCommand = `${useNeovim ? 'nvim' : 'vim'} '${fileName}' '+call cursor(${line}, ${column})'; exit` // cannot contain double quotes
+    let autocmdArgToSyncCursor = `'+autocmd VimLeavePre * execute \"!code --goto \" . expand(\"%\") . \":\" . line(\".\") . \":\" . col(\".\")'`
+    let vimCommand = `${useNeovim ? 'nvim' : 'vim'} '${fileName}' '+call cursor(${line}, ${column})' ${restoreCursorAfterVim ? autocmdArgToSyncCursor : ''}; exit` // cannot contain double quotes
     let getScript = () => {
         let tmpFile = tmp.fileSync();
         fs.writeFileSync(tmpFile.name, `
