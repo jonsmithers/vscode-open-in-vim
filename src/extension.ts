@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as tmp from 'tmp';
 import * as os from 'os';
 import * as opn from 'opn';
+import { execSync, spawnSync } from 'child_process';
 
 /*
  * Called when extension is activated. This happens the very first time the
@@ -154,7 +155,7 @@ type OpenMethods = {
 const openMethods: OpenMethods = {
     "gvim": function({workspacePath, vimCommand}: OpenMethodsArgument) {
         vimCommand = vimCommand.replace(/^vim|^nvim/, 'gvim');
-        require('child_process').execSync(vimCommand, {
+        execSync(vimCommand, {
             cwd: workspacePath,
             encoding: "utf8"
         });
@@ -167,12 +168,12 @@ const openMethods: OpenMethods = {
     "linux.gnome-terminal": function({getScript}: OpenMethodsArgument) {
         let args = getConfiguration().linux!['gnome-terminal']!.args;
         let gnomeTerminalCommand = `gnome-terminal ${args} --command='bash ${getScript()}'`
-        require('child_process').execSync(gnomeTerminalCommand);
+        execSync(gnomeTerminalCommand);
     },
     "linux.tilix": function({getScript}: OpenMethodsArgument) {
         let args = getConfiguration().linux!.tilix!.args;
         let tilixCommand = `tilix ${args} --command='bash ${getScript()}'`
-        require('child_process').execSync(tilixCommand);
+        execSync(tilixCommand);
     },
     "macos.iterm": function({getScript}: OpenMethodsArgument) {
         let profile = getConfiguration().macos!.iterm!.profile;
@@ -184,7 +185,7 @@ const openMethods: OpenMethods = {
               set myNewWin to create window with ${profile} command "bash ${getScript()}"
             end tell
         `;
-        let result = require('child_process').spawnSync("/usr/bin/osascript", {encoding: "utf8", input: osascriptcode})
+        let result = spawnSync("/usr/bin/osascript", {encoding: "utf8", input: osascriptcode})
         if (result.error) {
             throw result.error;
         }
@@ -194,7 +195,7 @@ const openMethods: OpenMethods = {
     },
     "macos.macvim": function({workspacePath, vimCommand}: OpenMethodsArgument) {
         vimCommand = vimCommand.replace(/^vim|^nvim/, 'mvim');
-        require('child_process').execSync(vimCommand, {
+        execSync(vimCommand, {
             cwd: workspacePath,
             encoding: "utf8"
         });
