@@ -12,6 +12,9 @@
     "categories": [
         "Other"
     ],
+    "keywords": [
+        "vim"
+    ],
     "activationEvents": [
         "onCommand:open-in-vim.open"
     ],
@@ -79,17 +82,16 @@
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
+    "icon": "images/icon.png",
+    "dependencies": {
+        "@types/tmp": "^0.1.0",
+        "opn": "^5.5.0",
+        "tmp": "^0.0.33"
+    },
     "devDependencies": {
         "typescript": "^3.3.1",
         "vscode": "^1.1.28",
         "@types/node": "^10.12.21",
         "@types/mocha": "^2.2.42"
-    },
-    "icon": "images/icon.png",
-    "dependencies": {
-        "@types/tmp": "^0.1.0",
-        "opn": "^5.5.0",
-        "tmp": "^0.0.33",
-        "vscode": "^1.1.26"
     }
 }
