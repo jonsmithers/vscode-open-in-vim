@@ -1,10 +1,11 @@
 # Open in Vim
 
 Open current file in vim. To activate this extension, open the [Command
-Palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette)
-(Ctrl+Shift+P on linux or ⇧⌘P on mac) and search for "Open in Vim".
-Alternatively, you can [assign a keyboard shortcut of your
-choosing](https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-editor).
+Palette] (Ctrl+Shift+P on linux or ⇧⌘P on mac) and search for "Open in Vim".
+Alternatively, you can [assign a keyboard shortcut of your choosing].
+
+[Command Palette]: https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette
+[assign a keyboard shortcut of your choosing]: https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-editor
 
 Windows is not supported.
 
@@ -12,35 +13,34 @@ Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 
 ## Extension Settings
 
-### `open-in-vim.openMethod`
+* **`open-in-vim.openMethod`**: specifies how vim should be launched. Allowed
+  values are tabulated below.
 
-| value                  | description                                               |
-| ---------------------- | --------------------------------------------------------- |
-| `gvim`                 | Open in gVim.                                             |
-| `integrated-terminal`  | (DEFAULT) Open vim in VSCode's integrated terminal.       |
-| `linux.gnome-terminal` | Open vim in gnome-terminal (full-screen).                 |
-| `linux.tilix`          | Open vim in [Tilix](https://gnunn1.github.io/tilix-web/). |
-| `macos.iterm`          | Open vim in iTerm2.                                       |
-| `macos.macvim`         | Open in MacVim.                                           |
+  | value                  | description                                               |
+  | ---------------------- | --------------------------------------------------------- |
+  | `gvim`                 | Open in gVim.                                             |
+  | `integrated-terminal`  | (DEFAULT) Open vim in VSCode's integrated terminal.       |
+  | `linux.gnome-terminal` | Open vim in gnome-terminal (full-screen).                 |
+  | `linux.tilix`          | Open vim in [Tilix](https://gnunn1.github.io/tilix-web/). |
+  | `macos.iterm`          | Open vim in iTerm2.                                       |
+  | `macos.macvim`         | Open in MacVim.                                           |
 
-`osx.iterm` and `osx.macvim` are legacy values that still work.
-
-### Other Settings
-
-| value                                   | default                        | description                                                                               |
-| --------------------------------------- | ------------------------------ | ----------------------------------------------------------------------------------------- |
-| `open-in-vim.linux.gnome-terminal.args` | `--hide-menubar --full-screen` | Space-separated arguments that get passed to `gnome-terminal`.                            |
-| `open-in-vim.linux.tilix.args`          | `--full-screen`                | Space-separated arguments that get passed to `tilix`.                                     |
-| `open-in-vim.macos.iterm.profile`       | `default profile`              | Name of iTerm profile to use (`default profile` is a special case to use iTerm's default) |
+* **`open-in-vim.useNeovim`**: whether to launch vim or neovim (ignored when
+  `openMethod` is set to gvim/macvim).
+* **`open-in-vim.restoreCursorAfterVim`**: *(EXPERIMENTAL)* syncs cursor
+  position from vim to vscode when you close vim. Assumes that the `code`
+  executable is in the *$PATH*.
+* Other settings for specific openMethods are tabulated below:
+  
+  | Setting                                 | Description                                                                                | Default                        |
+  | --------------------------------------- | -------------------------------------------------------------------------------------------| ------------------------------ |
+  | `open-in-vim.linux.gnome-terminal.args` | Space-separated arguments that get passed to `gnome-terminal`.                             | `--hide-menubar --full-screen` |
+  | `open-in-vimlinux.tilix.args`           | Space-separated arguments that get passed to `tilix`.                                      | `--full-screen`                |
+  | `open-in-vimmacos.iterm.profile`        | Name of iTerm profile to use (`default profile` is a special case to use iTerm's default). | `default profile`              |
 
 ## To do
 
-- [ ] Add option to move the vscode cursor to wherever user left off in vim.
-      This could be accomplished by added the following argument to vim:
-      `"+autocmd VimLeavePre * execute '!code ' . expand('%') . ':' . line('.')
-      . ':' . col('.')"`. This assumes that `code` is in _$PATH_.
 - [ ] Support macOS' native Terminal app
-
 
 ## Inverse Plugin
 

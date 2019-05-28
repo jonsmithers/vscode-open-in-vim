@@ -3,7 +3,13 @@ All notable changes to the "open-in-vim" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [UNPUBLISHED]
+## [0.5.0] - 2019-05-29
+### Added
+- Configuration option to use Neovim instead of Vim.
+- Experimental configuration option to sync vim's cursor position to vscode
+  when it exits. It's possible this does not belong within the scope of this
+  plugin.
+
 ### Fixed
 - Upgrade vscode module to resolve flag for [potential (harmless) security
   vulnerability](https://nvd.nist.gov/vuln/detail/CVE-2018-20834)
