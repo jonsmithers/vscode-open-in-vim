@@ -4,6 +4,7 @@ import * as tmp from 'tmp';
 import * as os from 'os';
 import * as opn from 'opn';
 import { execSync, spawnSync } from 'child_process';
+import { WorkspaceFolder } from 'vscode';
 
 /*
  * Called when extension is activated. This happens the very first time the
@@ -88,23 +89,20 @@ function openInVim() {
         return;
     }
 
-    let workspace = vscode.workspace.getWorkspaceFolder(activeTextEditor.document.uri);
-    if (!workspace) {
-        // current file doesn't belong to any open workspace
+    function getAlternateWorkspacePath(): string {
         if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length) {
             // default to first available workspace
-            workspace = vscode.workspace.workspaceFolders[0]
+            const workspace = vscode.workspace.workspaceFolders[0]
             vscode.window.setStatusBarMessage(`OpenInVim defaulted vim working dir to ${workspace.name}`, 5000);
-            var workspacePath = workspace.uri.path;
+            return workspace.uri.path;
         } else {
             // NO workspaces are open, so just use home
-            vscode.window.setStatusBarMessage(`OpenInVim defaulted vim working dir to HOME`, 5000);
-            if (!process.env.HOME) throw new Error('$HOME is not defined');
-            var workspacePath = process.env.HOME;
+            return os.homedir();
         }
-    } else {
-        var workspacePath = workspace.uri.path;
-    }
+    };
+
+    const workspace = vscode.workspace.getWorkspaceFolder(activeTextEditor.document.uri);
+    const workspacePath = workspace ? workspace.uri.path : getAlternateWorkspacePath();
 
     let position = activeTextEditor.selection.active;
     let fileName = activeTextEditor.document.fileName;
@@ -117,7 +115,7 @@ function openInVim() {
         fileName: fileName,
         // cannot contain double quotes
         args: `'+call cursor(${line}, ${column})' ${restoreCursorAfterVim ? autocmdArgToSyncCursor : ''}; exit`,
-        workspacePath: workspacePath,
+        workspacePath,
     });
 }
 
