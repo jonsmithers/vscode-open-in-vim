@@ -156,6 +156,15 @@ function formatAsUnixFilePath(winPath: string): string {
 
 const openMethods: OpenMethods = {
     "gvim": function(openArgs: OpenMethodsArgument) {
+        if (os.type().startsWith('Windows')) {
+            const viewAlternatePlugin = 'View alternative plugin'
+            vscode.window.showErrorMessage('Gvim is not supported on Windows. ლ(ಠ_ಠლ)', viewAlternatePlugin).then(choice => {
+                if (choice === viewAlternatePlugin) {
+                    opn('https://marketplace.visualstudio.com/items?itemName=mattn.OpenVim')
+                }
+            });
+            return;
+        }
         openArgs.vim = 'gvim'
         execSync(openArgsToCommand(openArgs), {
             cwd: openArgs.workspacePath,
