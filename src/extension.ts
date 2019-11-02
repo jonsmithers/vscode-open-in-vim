@@ -102,7 +102,11 @@ function openInVim() {
     };
 
     const workspace = vscode.workspace.getWorkspaceFolder(activeTextEditor.document.uri);
-    const workspacePath = workspace ? workspace.uri.path : getAlternateWorkspacePath();
+    let workspacePath = workspace ? workspace.uri.path : getAlternateWorkspacePath();
+
+    if (os.type().startsWith('Windows')) {
+        workspacePath = formatAsUnixFilePath(workspacePath);
+    }
 
     let position = activeTextEditor.selection.active;
     let fileName = activeTextEditor.document.fileName;
@@ -145,6 +149,11 @@ function openArgsToScriptFile(openArgs: OpenMethodsArgument) {
     return tmpFile.name;
 }
 
+/** example: converts `\c:\test\file.txt` to `/c/test/file.txt` */
+function formatAsUnixFilePath(winPath: string): string {
+    return winPath.replace(/^\/?(\w):/, '/$1').replace(/\\/g, '/');
+}
+
 const openMethods: OpenMethods = {
     "gvim": function(openArgs: OpenMethodsArgument) {
         openArgs.vim = 'gvim'
@@ -154,10 +163,22 @@ const openMethods: OpenMethods = {
         });
     },
     "integrated-terminal": function (openArgs: OpenMethodsArgument) {
-        const shellPath = getConfiguration().integratedShellPath || (os.type().startsWith('Windows') ? 'C:\\Program Files\\Git\\bin\\bash.exe' : '/bin/bash')
-        if (/Git[\\/]bin[\\/]bash.exe$/.test(shellPath)) {
-            // for git-bash, convert `c:\test\file.txt` to `/c/test/file.txt`
-            openArgs.fileName = openArgs.fileName.replace(/^(\w):/, '/$1').replace(/\\/g, '/')
+        const shellPath = getConfiguration().integratedShellPath || (os.type().startsWith('Windows') ? 'C:\\Program Files\\Git\\bin\\bash.exe' : '/bin/bash');
+        if (!fs.existsSync(shellPath)) {
+            if (os.type().startsWith('Windows')) {
+                const installGit = 'Install Git';
+                vscode.window.showErrorMessage(`Failed to find unix shell. If you install Git, open-in-vim can use "C:\\Program Files\\Git\\bin\\bash.exe".`, installGit).then(choice => {
+                    if (choice === installGit) {
+                        opn('https://git-scm.com/download/win');
+                    }
+                });
+                return;
+            } else {
+                throw new Error(`Failed to find shell "${shellPath}"`);
+            }
+        }
+        if (os.type().startsWith('Windows')) {
+            openArgs.fileName = formatAsUnixFilePath(openArgs.fileName);
         }
         let terminal = vscode.window.createTerminal({name: "Open in Vim", shellPath, shellArgs: [openArgsToScriptFile(openArgs)]});
         terminal.show(true);
