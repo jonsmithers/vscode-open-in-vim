@@ -102,11 +102,7 @@ function openInVim() {
     };
 
     const workspace = vscode.workspace.getWorkspaceFolder(activeTextEditor.document.uri);
-    let workspacePath = workspace ? workspace.uri.path : getAlternateWorkspacePath();
-
-    if (os.type().startsWith('Windows')) {
-        workspacePath = formatAsUnixFilePath(workspacePath);
-    }
+    let workspacePath = ensureUnixPathFormat(workspace ? workspace.uri.path : getAlternateWorkspacePath())
 
     let position = activeTextEditor.selection.active;
     let fileName = activeTextEditor.document.fileName;
@@ -149,9 +145,15 @@ function openArgsToScriptFile(openArgs: OpenMethodsArgument) {
     return tmpFile.name;
 }
 
-/** example: converts `\c:\test\file.txt` to `/c/test/file.txt` */
-function formatAsUnixFilePath(winPath: string): string {
-    return winPath.replace(/^\/?(\w):/, '/$1').replace(/\\/g, '/');
+/** example: converts `\C:\test\file.txt` to `/c/test/file.txt` */
+function ensureUnixPathFormat(path: string): string {
+    if (os.type().startsWith('Windows')) {
+        return path
+            .replace(/^\/?(\w):/, (str, driveLetter) => `/${driveLetter.toLowerCase()}`)
+            .replace(/\\/g, '/');
+    } else {
+        return path;
+    }
 }
 
 const openMethods: OpenMethods = {
@@ -172,6 +174,7 @@ const openMethods: OpenMethods = {
         });
     },
     "integrated-terminal": function (openArgs: OpenMethodsArgument) {
+        openArgs.fileName = ensureUnixPathFormat(openArgs.fileName);
         const shellPath = getConfiguration().integratedShellPath || (os.type().startsWith('Windows') ? 'C:\\Program Files\\Git\\bin\\bash.exe' : '/bin/bash');
         if (!fs.existsSync(shellPath)) {
             if (os.type().startsWith('Windows')) {
@@ -186,10 +189,7 @@ const openMethods: OpenMethods = {
                 throw new Error(`Failed to find shell "${shellPath}"`);
             }
         }
-        if (os.type().startsWith('Windows')) {
-            openArgs.fileName = formatAsUnixFilePath(openArgs.fileName);
-        }
-        let terminal = vscode.window.createTerminal({name: "Open in Vim", shellPath, shellArgs: [openArgsToScriptFile(openArgs)]});
+        let terminal = vscode.window.createTerminal({name: "Open in Vim", shellPath, shellArgs: [ensureUnixPathFormat(openArgsToScriptFile(openArgs))]});
         terminal.show(true);
         vscode.commands.executeCommand("workbench.action.terminal.focus");
     },
