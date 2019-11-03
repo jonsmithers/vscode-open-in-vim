@@ -35,7 +35,9 @@ type Config = {
     openMethod: OpenMethodKey;
     useNeovim: boolean;
     restoreCursorAfterVim: boolean;
-    integratedShellPath?: string,
+    'integrated-terminal': {
+        pathToShell: string;
+    },
     linux?: {
         'gnome-terminal'?: {
             args: string
@@ -51,14 +53,23 @@ type Config = {
     }
 }
 function getConfiguration(): Config {
-    let configuration = vscode.workspace.getConfiguration()["open-in-vim"]
+    let configuration = { ...vscode.workspace.getConfiguration()["open-in-vim"] };
+    if (!configuration['integrated-terminal']) {
+        configuration['integrated-terminal'] = {};
+    }
+    if (!configuration['integrated-terminal'].pathToShell) {
+        configuration['integrated-terminal'] = {
+            ...configuration['integrated-terminal'],
+            pathToShell: os.type().startsWith('Windows') ? 'C:\\Program Files\\Git\\bin\\bash.exe' : '/bin/bash'
+        };
+    }
 
     let openMethodLegacyAliases = [
         ["osx.iterm",  "macos.iterm"],
         ["osx.macvim", "macos.macvim"]
     ];
     for (let [legacyValue, newValue] of openMethodLegacyAliases) {
-        if (configuration.openMethod == legacyValue) {
+        if (configuration.openMethod === legacyValue) {
             configuration.openMethod = newValue;
         }
     }
@@ -175,7 +186,8 @@ const openMethods: OpenMethods = {
     },
     "integrated-terminal": function (openArgs: OpenMethodsArgument) {
         openArgs.fileName = ensureUnixPathFormat(openArgs.fileName);
-        const shellPath = getConfiguration().integratedShellPath || (os.type().startsWith('Windows') ? 'C:\\Program Files\\Git\\bin\\bash.exe' : '/bin/bash');
+        const shellPath = getConfiguration()['integrated-terminal'].pathToShell;
+
         if (!fs.existsSync(shellPath)) {
             if (os.type().startsWith('Windows')) {
                 const installGit = 'Install Git';

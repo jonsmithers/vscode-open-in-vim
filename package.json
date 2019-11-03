@@ -54,10 +54,10 @@
                     "default": false,
                     "description": "(EXPERIMENTAL) Sync cursor position to vscode when vim quits"
                 },
-                "open-in-vim.integratedShellPath": {
+                "open-in-vim.integrated-terminal.pathToShell": {
                     "type": "string",
                     "default": null,
-                    "definition": "Shell path of integrated terminal."
+                    "definition": "Path to unix shell which will host the vim process."
                 },
                 "open-in-vim.linux.gnome-terminal.args": {
                     "type": "string",
