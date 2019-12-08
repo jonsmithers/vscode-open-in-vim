@@ -114,7 +114,7 @@ function openInVim() {
     }
 
     const workspace = vscode.workspace.getWorkspaceFolder(activeTextEditor.document.uri);
-    let workspacePath = ensureUnixPathFormat(workspace ? workspace.uri.path : getAlternateWorkspacePath());
+    const workspacePath = workspace ? workspace.uri.path : getAlternateWorkspacePath();
 
     let position = activeTextEditor.selection.active;
     let fileName = activeTextEditor.document.fileName;
@@ -157,11 +157,14 @@ function openArgsToScriptFile(openArgs: OpenMethodsArgument) {
     return tmpFile.name;
 }
 
-/** example: converts `\C:\test\file.txt` to `/c/test/file.txt` */
-function ensureUnixPathFormat(path: string): string {
+/**
+ * example: converts `\C:\test\file.txt` to `/c/test/file.txt`
+ *                                       or `/mnt/c/test/file.txt` (for isWslStyle=true)
+ */
+function ensureUnixPathFormat(path: string, isWslStyle: boolean): string {
     if (os.type().startsWith('Windows')) {
         return path
-            .replace(/^\/?(\w):/, (str, driveLetter) => `/${driveLetter.toLowerCase()}`)
+            .replace(/^\/?(\w):/, (str, driveLetter) => `/${isWslStyle ? 'mnt/' : ''}${driveLetter.toLowerCase()}`)
             .replace(/\\/g, '/');
     } else {
         return path;
@@ -186,7 +189,6 @@ const openMethods: OpenMethods = {
         });
     },
     "integrated-terminal": function (openArgs: OpenMethodsArgument) {
-        openArgs.fileName = ensureUnixPathFormat(openArgs.fileName);
         const shellPath = getConfiguration()['integrated-terminal'].pathToShell;
 
         if (!fs.existsSync(shellPath)) {
@@ -202,11 +204,21 @@ const openMethods: OpenMethods = {
             }
             return;
         }
+
+        /** Windows Subsystem for Linux sees different paths than git bash */
+        const isWslStyle =
+            os.type().startsWith('Windows') &&
+            (0 === require('child_process')
+                .spawnSync(shellPath, ['-c', 'test -d /mnt/c'])
+                .status);
+
+        openArgs.fileName = ensureUnixPathFormat(openArgs.fileName, isWslStyle);
+        openArgs.workspacePath = ensureUnixPathFormat(openArgs.workspacePath, isWslStyle);
         let terminal = vscode.window.createTerminal({
             name: "Open in Vim",
             shellPath,
             shellArgs: [
-                ensureUnixPathFormat(openArgsToScriptFile(openArgs))
+                ensureUnixPathFormat(openArgsToScriptFile(openArgs), isWslStyle)
             ]
         });
         terminal.show(true);
