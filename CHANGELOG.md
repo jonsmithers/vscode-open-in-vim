@@ -3,6 +3,10 @@ All notable changes to the "open-in-vim" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.6.0] - 2019-08-2019
+### Added
+- Support for integrated-terminal on Windows.
+
 ## [0.5.0] - 2019-05-29
 ### Added
 - Configuration option to use Neovim instead of Vim.
