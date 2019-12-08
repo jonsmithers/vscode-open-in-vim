@@ -52,6 +52,7 @@ type Config = {
         }
     }
 };
+const PATH_TO_WINDOWS_GIT_SHELL = 'C:\\Program Files\\Git\\bin\\bash.exe';
 function getConfiguration(): Config {
     let configuration = { ...vscode.workspace.getConfiguration()["open-in-vim"] };
     if (!configuration['integrated-terminal']) {
@@ -60,7 +61,7 @@ function getConfiguration(): Config {
     if (!configuration['integrated-terminal'].pathToShell) {
         configuration['integrated-terminal'] = {
             ...configuration['integrated-terminal'],
-            pathToShell: os.type().startsWith('Windows') ? 'C:\\Program Files\\Git\\bin\\bash.exe' : '/bin/bash'
+            pathToShell: os.type().startsWith('Windows') ? PATH_TO_WINDOWS_GIT_SHELL : '/bin/bash'
         };
     }
 
@@ -189,17 +190,17 @@ const openMethods: OpenMethods = {
         const shellPath = getConfiguration()['integrated-terminal'].pathToShell;
 
         if (!fs.existsSync(shellPath)) {
-            if (os.type().startsWith('Windows')) {
+            if (os.type().startsWith('Windows') && shellPath === PATH_TO_WINDOWS_GIT_SHELL) {
                 const installGit = 'Install Git';
-                vscode.window.showErrorMessage(`Failed to find unix shell. If you install Git, open-in-vim can use "C:\\Program Files\\Git\\bin\\bash.exe".`, installGit).then(choice => {
+                vscode.window.showErrorMessage(`Failed to find unix shell. If you install Git, open-in-vim can use "${PATH_TO_WINDOWS_GIT_SHELL}".`, installGit).then(choice => {
                     if (choice === installGit) {
                         opn('https://git-scm.com/download/win');
                     }
                 });
-                return;
             } else {
-                throw new Error(`Failed to find shell "${shellPath}"`);
+                vscode.window.showErrorMessage(`Failed to find unix shell "${shellPath}". Check your settings.`);
             }
+            return;
         }
         let terminal = vscode.window.createTerminal({
             name: "Open in Vim",
