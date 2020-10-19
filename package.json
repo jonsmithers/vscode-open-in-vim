@@ -54,6 +54,11 @@
                     "default": false,
                     "description": "(EXPERIMENTAL) Sync cursor position to vscode when vim quits"
                 },
+                "open-in-vim.synchronous": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Run only one instance at a time"
+                },
                 "open-in-vim.integrated-terminal.pathToShell": {
                     "type": "string",
                     "default": null,
