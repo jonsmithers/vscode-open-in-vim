@@ -62,7 +62,7 @@
                 "open-in-vim.integrated-terminal.pathToShell": {
                     "type": "string",
                     "default": null,
-                    "definition": "Path to unix shell which will host the vim process."
+                    "description": "Path to unix shell which will host the vim process."
                 },
                 "open-in-vim.linux.gnome-terminal.args": {
                     "type": "string",
