@@ -50,7 +50,8 @@ type Config = {
         iterm: {
             profile: string;
         }
-    }
+    },
+    extraArgs: string
 };
 const PATH_TO_WINDOWS_GIT_SHELL = 'C:\\Program Files\\Git\\bin\\bash.exe';
 function getConfiguration(): Config {
@@ -79,7 +80,7 @@ function getConfiguration(): Config {
 }
 
 function openInVim() {
-    const { openMethod, useNeovim, restoreCursorAfterVim } = getConfiguration();
+    const { openMethod, useNeovim, restoreCursorAfterVim, extraArgs } = getConfiguration();
 
     let activeTextEditor = vscode.window.activeTextEditor;
     if (!activeTextEditor) {
@@ -126,7 +127,7 @@ function openInVim() {
         vim: useNeovim ? 'nvim' : 'vim',
         fileName: fileName,
         // cannot contain double quotes
-        args: `'+call cursor(${line}, ${column})' ${restoreCursorAfterVim ? autocmdArgToSyncCursor : ''}; exit`,
+        args: `'+call cursor(${line}, ${column})' ${restoreCursorAfterVim ? autocmdArgToSyncCursor : ''} ${extraArgs}`,
         workspacePath,
     });
 }
@@ -145,7 +146,7 @@ type OpenMethods = {
 };
 
 function openArgsToCommand(openArgs: OpenMethodsArgument) {
-    return `${openArgs.vim} '${openArgs.fileName}' ${openArgs.args}`;
+    return `${openArgs.vim} ${openArgs.args} '${openArgs.fileName}'`;
 }
 
 function openArgsToScriptFile(openArgs: OpenMethodsArgument) {
