@@ -131,7 +131,7 @@ function openInVim() {
     });
 }
 
-type OpenMethodKey = 'gvim' | 'integrated-terminal' | 'linux.gnome-terminal' | 'linux.tilix' | 'macos.iterm' | 'macos.macvim';
+type OpenMethodKey = 'gvim' | 'integrated-terminal' | 'kitty' | 'linux.gnome-terminal' | 'linux.tilix' | 'macos.iterm' | 'macos.macvim';
 
 interface OpenMethodsArgument {
     vim: string;
@@ -148,6 +148,10 @@ function openArgsToCommand(openArgs: OpenMethodsArgument) {
     return `${openArgs.vim} '${openArgs.fileName}' ${openArgs.args}`;
 }
 
+/**
+ * @param openArgs
+ * @returns A filepath to a script that opens vim according to openArgs
+ */
 function openArgsToScriptFile(openArgs: OpenMethodsArgument) {
     let tmpFile = tmp.fileSync();
     fs.writeFileSync(tmpFile.name, `
@@ -223,6 +227,11 @@ const openMethods: OpenMethods = {
         });
         terminal.show(true);
         vscode.commands.executeCommand("workbench.action.terminal.focus");
+    },
+    "kitty": (openArgs: OpenMethodsArgument) => {
+        let kittyCommand = `kitty --title 'vscode-open-in-vim' bash '${openArgsToScriptFile(openArgs)}'`;
+        console.log(kittyCommand);
+        execSync(kittyCommand);
     },
     "linux.gnome-terminal": function(openArgs: OpenMethodsArgument) {
         let args = getConfiguration().linux!['gnome-terminal']!.args;
