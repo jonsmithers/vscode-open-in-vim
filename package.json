@@ -90,15 +90,14 @@
     "icon": "images/icon.png",
     "dependencies": {
         "@types/tmp": "*",
-        "opn": "6.0.0",
-        "tmp": "0.2.1"
+        "opn": "*",
+        "tmp": "*"
     },
     "devDependencies": {
-        "@types/mocha": "9.0.0",
-        "@types/node": "16.11.6",
-        "@types/vscode": "1.61.0",
-        "tslint": "6.1.3",
-        "typescript": "4.4.4",
-        "vscode-test": "1.6.1"
+        "@types/mocha": "*",
+        "@types/node": "*",
+        "@types/vscode": "*",
+        "typescript": "*",
+        "vscode-test": "*"
     }
 }
