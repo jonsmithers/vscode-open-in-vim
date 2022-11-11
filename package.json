@@ -85,7 +85,7 @@
                 },
                 "open-in-vim.extraArgs": {
                     "type": "string",
-                    "default": null,
+                    "default": "",
                     "description": "Extra arguments to pass to vim"
                 }
             }
