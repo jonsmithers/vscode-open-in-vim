@@ -3,11 +3,11 @@
     "displayName": "Open in Vim",
     "description": "Opens current file in vim",
     "repository": "jonsmithers/vscode-open-in-vim",
-    "version": "0.6.0",
+    "version": "0.7.0",
     "publisher": "jonsmithers",
     "license": "MIT",
     "engines": {
-        "vscode": "^1.19.0"
+        "vscode": "^1.61.0"
     },
     "categories": [
         "Other"
@@ -35,6 +35,7 @@
                     "enum": [
                         "gvim",
                         "integrated-terminal",
+                        "kitty",
                         "linux.gnome-terminal",
                         "linux.tilix",
                         "macos.iterm",
@@ -98,16 +99,15 @@
     },
     "icon": "images/icon.png",
     "dependencies": {
-        "@types/tmp": "^0.1.0",
-        "opn": "^5.5.0",
-        "tmp": "^0.0.33"
+        "@types/tmp": "*",
+        "opn": "*",
+        "tmp": "*"
     },
     "devDependencies": {
-        "@types/mocha": "^2.2.42",
-        "@types/node": "^10.12.21",
-        "@types/vscode": "^1.19.0",
-        "tslint": "^5.20.0",
-        "typescript": "^3.3.1",
-        "vscode-test": "^1.2.3"
+        "@types/mocha": "*",
+        "@types/node": "*",
+        "@types/vscode": "*",
+        "typescript": "*",
+        "vscode-test": "*"
     }
 }

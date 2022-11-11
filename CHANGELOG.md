@@ -3,7 +3,11 @@ All notable changes to the "open-in-vim" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [0.6.0] - 2019-08-2019
+## [0.7.0] - 2021-10-28
+### Added
+- Support for [Kitty](https://sw.kovidgoyal.net/kitty/) terminal
+
+## [0.6.0] - 2019-12-08
 ### Added
 - Support for integrated-terminal on Windows.
 

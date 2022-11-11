@@ -25,12 +25,6 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(disposable);
 }
 
-/*
- * Called when extension is deactivated
- */
-export function deactivate() {
-}
-
 type Config = {
     openMethod: OpenMethodKey;
     useNeovim: boolean;
@@ -134,7 +128,7 @@ function openInVim() {
     });
 }
 
-type OpenMethodKey = 'gvim' | 'integrated-terminal' | 'linux.gnome-terminal' | 'linux.tilix' | 'macos.iterm' | 'macos.macvim';
+type OpenMethodKey = 'gvim' | 'integrated-terminal' | 'kitty' | 'linux.gnome-terminal' | 'linux.tilix' | 'macos.iterm' | 'macos.macvim';
 
 interface OpenMethodsArgument {
     vim: string;
@@ -152,6 +146,10 @@ function openArgsToCommand(openArgs: OpenMethodsArgument) {
     return `${openArgs.vim} ${openArgs.args} '${openArgs.fileName}'`;
 }
 
+/**
+ * @param openArgs
+ * @returns A filepath to a script that opens vim according to openArgs
+ */
 function openArgsToScriptFile(openArgs: OpenMethodsArgument) {
     let tmpFile = tmp.fileSync();
     fs.writeFileSync(tmpFile.name, `
@@ -176,7 +174,7 @@ function ensureUnixPathFormat(path: string, isWslStyle: boolean): string {
 }
 
 const openMethods: OpenMethods = {
-    "gvim": function(openArgs: OpenMethodsArgument) {
+    "gvim": (openArgs: OpenMethodsArgument) => {
         if (os.type().startsWith('Windows')) {
             const viewAlternatePlugin = 'View alternative plugin';
             vscode.window.showErrorMessage('Gvim is not supported on Windows. ლ(ಠ_ಠლ)', viewAlternatePlugin).then(choice => {
@@ -192,7 +190,7 @@ const openMethods: OpenMethods = {
             encoding: "utf8"
         });
     },
-    "integrated-terminal": function (openArgs: OpenMethodsArgument) {
+    "integrated-terminal": (openArgs: OpenMethodsArgument) => {
         const shellPath = getConfiguration()['integrated-terminal'].pathToShell;
 
         if (!fs.existsSync(shellPath)) {
@@ -228,17 +226,22 @@ const openMethods: OpenMethods = {
         terminal.show(true);
         vscode.commands.executeCommand("workbench.action.terminal.focus");
     },
-    "linux.gnome-terminal": function(openArgs: OpenMethodsArgument) {
+    "kitty": (openArgs: OpenMethodsArgument) => {
+        let kittyCommand = `kitty --title 'vscode-open-in-vim' bash '${openArgsToScriptFile(openArgs)}'`;
+        console.log(kittyCommand);
+        execSync(kittyCommand);
+    },
+    "linux.gnome-terminal": (openArgs: OpenMethodsArgument) => {
         let args = getConfiguration().linux!['gnome-terminal']!.args;
         let gnomeTerminalCommand = `gnome-terminal ${args} --command='bash ${openArgsToScriptFile(openArgs)}'`;
         openArgs.exec(gnomeTerminalCommand);
     },
-    "linux.tilix": function(openArgs: OpenMethodsArgument) {
+    "linux.tilix": (openArgs: OpenMethodsArgument) => {
         let args = getConfiguration().linux!.tilix!.args;
         let tilixCommand = `tilix ${args} --command='bash ${openArgsToScriptFile(openArgs)}'`;
         openArgs.exec(tilixCommand);
     },
-    "macos.iterm": function (openArgs: OpenMethodsArgument) {
+    "macos.iterm":  (openArgs: OpenMethodsArgument) => {
         let profile = getConfiguration().macos!.iterm!.profile;
         if (profile !== "default profile") {
             profile = `profile "${profile}"`;
@@ -256,7 +259,7 @@ const openMethods: OpenMethods = {
             throw result.stderr;
         }
     },
-    "macos.macvim": function(openArgs: OpenMethodsArgument) {
+    "macos.macvim": (openArgs: OpenMethodsArgument) => {
         openArgs.vim = 'mvim';
         openArgs.exec(openArgsToCommand(openArgs), {
             cwd: openArgs.workspacePath,
