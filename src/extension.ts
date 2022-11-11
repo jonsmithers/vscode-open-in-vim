@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as tmp from 'tmp';
 import * as os from 'os';
 import * as opn from 'opn';
-import { execSync, spawnSync } from 'child_process';
+import { exec, execSync, spawnSync } from 'child_process';
 import { WorkspaceFolder } from 'vscode';
 
 /*
@@ -44,7 +44,9 @@ type Config = {
         iterm: {
             profile: string;
         }
-    }
+    },
+    extraArgs: string,
+    synchronous: boolean
 };
 const PATH_TO_WINDOWS_GIT_SHELL = 'C:\\Program Files\\Git\\bin\\bash.exe';
 function getConfiguration(): Config {
@@ -73,7 +75,7 @@ function getConfiguration(): Config {
 }
 
 function openInVim() {
-    const { openMethod, useNeovim, restoreCursorAfterVim } = getConfiguration();
+    const { openMethod, useNeovim, restoreCursorAfterVim, extraArgs, synchronous } = getConfiguration();
 
     let activeTextEditor = vscode.window.activeTextEditor;
     if (!activeTextEditor) {
@@ -120,8 +122,9 @@ function openInVim() {
         vim: useNeovim ? 'nvim' : 'vim',
         fileName: fileName,
         // cannot contain double quotes
-        args: `'+call cursor(${line}, ${column})' ${restoreCursorAfterVim ? autocmdArgToSyncCursor : ''}; exit`,
+        args: `'+call cursor(${line}, ${column})' ${restoreCursorAfterVim ? autocmdArgToSyncCursor : ''} ${extraArgs}`,
         workspacePath,
+        exec: synchronous ? execSync : exec,
     });
 }
 
@@ -132,6 +135,7 @@ interface OpenMethodsArgument {
     fileName: string;
     args: string;
     workspacePath: string;
+    exec: typeof execSync | typeof exec;
 }
 
 type OpenMethods = {
@@ -139,7 +143,7 @@ type OpenMethods = {
 };
 
 function openArgsToCommand(openArgs: OpenMethodsArgument) {
-    return `${openArgs.vim} '${openArgs.fileName}' ${openArgs.args}`;
+    return `${openArgs.vim} ${openArgs.args} '${openArgs.fileName}'`;
 }
 
 /**
@@ -181,7 +185,7 @@ const openMethods: OpenMethods = {
             return;
         }
         openArgs.vim = 'gvim';
-        execSync(openArgsToCommand(openArgs), {
+        openArgs.exec(openArgsToCommand(openArgs), {
             cwd: openArgs.workspacePath,
             encoding: "utf8"
         });
@@ -230,12 +234,12 @@ const openMethods: OpenMethods = {
     "linux.gnome-terminal": (openArgs: OpenMethodsArgument) => {
         let args = getConfiguration().linux!['gnome-terminal']!.args;
         let gnomeTerminalCommand = `gnome-terminal ${args} --command='bash ${openArgsToScriptFile(openArgs)}'`;
-        execSync(gnomeTerminalCommand);
+        openArgs.exec(gnomeTerminalCommand);
     },
     "linux.tilix": (openArgs: OpenMethodsArgument) => {
         let args = getConfiguration().linux!.tilix!.args;
         let tilixCommand = `tilix ${args} --command='bash ${openArgsToScriptFile(openArgs)}'`;
-        execSync(tilixCommand);
+        openArgs.exec(tilixCommand);
     },
     "macos.iterm":  (openArgs: OpenMethodsArgument) => {
         let profile = getConfiguration().macos!.iterm!.profile;
@@ -257,7 +261,7 @@ const openMethods: OpenMethods = {
     },
     "macos.macvim": (openArgs: OpenMethodsArgument) => {
         openArgs.vim = 'mvim';
-        execSync(openArgsToCommand(openArgs), {
+        openArgs.exec(openArgsToCommand(openArgs), {
             cwd: openArgs.workspacePath,
             encoding: "utf8"
         });

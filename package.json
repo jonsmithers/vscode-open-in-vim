@@ -55,10 +55,15 @@
                     "default": false,
                     "description": "(EXPERIMENTAL) Sync cursor position to vscode when vim quits"
                 },
+                "open-in-vim.synchronous": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Run only one instance at a time"
+                },
                 "open-in-vim.integrated-terminal.pathToShell": {
                     "type": "string",
                     "default": null,
-                    "definition": "Path to unix shell which will host the vim process."
+                    "description": "Path to unix shell which will host the vim process."
                 },
                 "open-in-vim.linux.gnome-terminal.args": {
                     "type": "string",
@@ -77,6 +82,11 @@
                     "scope": "resource",
                     "default": "default profile",
                     "description": "Profile to use for iterm window"
+                },
+                "open-in-vim.extraArgs": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Extra arguments to pass to vim"
                 }
             }
         }
