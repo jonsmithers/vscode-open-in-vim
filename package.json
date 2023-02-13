@@ -97,6 +97,9 @@
         "@types/mocha": "*",
         "@types/node": "*",
         "@types/vscode": "*",
+        "@typescript-eslint/eslint-plugin": "^5.51.0",
+        "@typescript-eslint/parser": "^5.51.0",
+        "eslint": "^8.34.0",
         "typescript": "*",
         "vscode-test": "*"
     }

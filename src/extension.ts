@@ -4,7 +4,6 @@ import * as tmp from 'tmp';
 import * as os from 'os';
 import * as opn from 'opn';
 import { execSync, spawnSync } from 'child_process';
-import { WorkspaceFolder } from 'vscode';
 
 /*
  * Called when extension is activated. This happens the very first time the
