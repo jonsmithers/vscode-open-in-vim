@@ -114,13 +114,15 @@ function openInVim() {
     let fileName = activeTextEditor.document.fileName;
     let line = position.line+1;
     let column = position.character+1;
-    let autocmdArgToSyncCursor = `'+autocmd VimLeavePre * execute \"!code --goto \" . expand(\"%\") . \":\" . line(\".\") . \":\" . col(\".\")'`;
+
+    /** autocmd VimLeavePre * execute "!code --goto '" . expand("%") . ":" . line(".") . ":" . col(".") . "'" */
+    let AUTOCMD_TO_SYNC_CURSOR = `'+autocmd VimLeavePre * execute "!code --goto '"'"'" . expand("%") . ":" . line(".") . ":" . col(".") . "'"'"'"'`;
 
     actualOpenMethod({
         vim: useNeovim ? 'nvim' : 'vim',
         fileName: fileName,
         // cannot contain double quotes
-        args: `'+call cursor(${line}, ${column})' ${restoreCursorAfterVim ? autocmdArgToSyncCursor : ''}; exit`,
+        args: `'+call cursor(${line}, ${column})' ${restoreCursorAfterVim ? AUTOCMD_TO_SYNC_CURSOR : ''}; exit`,
         workspacePath,
     });
 }
