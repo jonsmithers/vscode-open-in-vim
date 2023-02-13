@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as tmp from 'tmp';
 import * as os from 'os';
-import * as opn from 'opn';
+import * as open from 'open';
 import { execSync, spawnSync } from 'child_process';
 
 /*
@@ -176,7 +176,7 @@ const openMethods: OpenMethods = {
             const viewAlternatePlugin = 'View alternative plugin';
             vscode.window.showErrorMessage('Gvim is not supported on Windows. ლ(ಠ_ಠლ)', viewAlternatePlugin).then(choice => {
                 if (choice === viewAlternatePlugin) {
-                    opn('https://marketplace.visualstudio.com/items?itemName=mattn.OpenVim');
+                    open('https://marketplace.visualstudio.com/items?itemName=mattn.OpenVim');
                 }
             });
             return;
@@ -195,7 +195,7 @@ const openMethods: OpenMethods = {
                 const installGit = 'Install Git';
                 vscode.window.showErrorMessage(`Failed to find unix shell. If you install Git, open-in-vim can use "${PATH_TO_WINDOWS_GIT_SHELL}".`, installGit).then(choice => {
                     if (choice === installGit) {
-                        opn('https://git-scm.com/download/win');
+                        open('https://git-scm.com/download/win');
                     }
                 });
             } else {

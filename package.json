@@ -90,7 +90,7 @@
     "icon": "images/icon.png",
     "dependencies": {
         "@types/tmp": "*",
-        "opn": "*",
+        "open": "^8.4.1",
         "tmp": "*"
     },
     "devDependencies": {
