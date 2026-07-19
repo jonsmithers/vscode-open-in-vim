@@ -15,7 +15,7 @@
     "keywords": [
         "vim"
     ],
-    "main": "./out/extension.js",
+    "main": "./dist/extension.js",
     "contributes": {
         "commands": [
             {
@@ -80,8 +80,10 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
+        "compile": "npm run check-types && node esbuild.js",
+        "check-types": "tsc --noEmit -p ./",
+        "watch": "node esbuild.js --watch",
+        "lint": "oxlint src",
         "test": "npm run compile && vscode-test"
     },
     "icon": "images/icon.png",
@@ -94,11 +96,10 @@
         "@types/mocha": "^10.0.10",
         "@types/node": "^22.20.1",
         "@types/vscode": "1.90.0",
-        "@typescript-eslint/eslint-plugin": "^5.51.0",
-        "@typescript-eslint/parser": "^5.51.0",
         "@vscode/test-cli": "^0.0.15",
         "@vscode/test-electron": "^3.0.0",
-        "eslint": "^8.34.0",
+        "esbuild": "^0.28.1",
+        "oxlint": "^1.74.0",
         "typescript": "^7.0.2"
     }
 }

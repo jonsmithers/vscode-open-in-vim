@@ -1,0 +1,8 @@
+{
+    "$schema": "./node_modules/oxlint/configuration_schema.json",
+    "plugins": ["typescript"],
+    "rules": {
+        "prefer-const": "off",
+        "typescript/no-non-null-assertion": "off"
+    }
+}
