@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as tmp from 'tmp';
 import * as os from 'os';
-import * as open from 'open';
+import open = require('open');
 import { execSync, spawnSync } from 'child_process';
 
 /*
