@@ -85,22 +85,23 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+        "test": "npm run compile && vscode-test"
     },
     "icon": "images/icon.png",
     "dependencies": {
-        "@types/tmp": "*",
-        "open": "^8.4.1",
-        "tmp": "*"
+        "@types/tmp": "^0.2.6",
+        "open": "^8.4.2",
+        "tmp": "^0.2.7"
     },
     "devDependencies": {
-        "@types/mocha": "*",
-        "@types/node": "*",
-        "@types/vscode": "*",
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^22.20.1",
+        "@types/vscode": "1.61.0",
         "@typescript-eslint/eslint-plugin": "^5.51.0",
         "@typescript-eslint/parser": "^5.51.0",
+        "@vscode/test-cli": "^0.0.15",
+        "@vscode/test-electron": "^3.0.0",
         "eslint": "^8.34.0",
-        "typescript": "*",
-        "vscode-test": "*"
+        "typescript": "^5.9.3"
     }
 }
