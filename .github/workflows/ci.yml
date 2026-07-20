@@ -15,6 +15,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
+      - run: npm run format:check
       - run: npm run compile
       # The tests launch a real VS Code instance, which needs a display on Linux.
       - run: xvfb-run -a npm test

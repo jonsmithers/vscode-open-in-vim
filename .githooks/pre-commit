@@ -1,0 +1,15 @@
+#!/bin/sh
+# Enable with: git config core.hooksPath .githooks
+
+staged_ts_files=$(git diff --cached --name-only --diff-filter=ACM -- 'src/*.ts')
+
+if [ -z "$staged_ts_files" ]; then
+    exit 0
+fi
+
+echo "$staged_ts_files" | xargs npx prettier --check
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "Prettier check failed. Run 'npm run format' and re-stage the changes."
+    exit 1
+fi
