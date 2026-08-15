@@ -7,7 +7,7 @@
     "publisher": "jonsmithers",
     "license": "MIT",
     "engines": {
-        "vscode": "^1.61.0"
+        "vscode": "^1.103.0"
     },
     "categories": [
         "Other"
@@ -95,8 +95,8 @@
     },
     "devDependencies": {
         "@types/mocha": "*",
-        "@types/node": "*",
-        "@types/vscode": "*",
+        "@types/node": "^26.2.0",
+        "@types/vscode": "^1.103.0",
         "@typescript-eslint/eslint-plugin": "^5.51.0",
         "@typescript-eslint/parser": "^5.51.0",
         "eslint": "^8.34.0",
