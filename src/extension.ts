@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as tmp from 'tmp';
 import * as os from 'os';
-import * as open from 'open';
+import open from 'open';
 import { execSync, spawnSync } from 'child_process';
 
 /*
@@ -12,10 +12,10 @@ import { execSync, spawnSync } from 'child_process';
 export function activate(context: vscode.ExtensionContext) {
 
     // implements command declared in package.json file
-    let disposable = vscode.commands.registerCommand('open-in-vim.open', function() {
+    let disposable = vscode.commands.registerCommand('open-in-vim.open', async function () {
         try {
-            openInVim();
-        } catch(e) {
+            await openInVim();
+        } catch (e) {
             console.error(e);
             vscode.window.showErrorMessage("Open in Vim failed: " + e);
         }
@@ -59,7 +59,7 @@ function getConfiguration(): Config {
     }
 
     let openMethodLegacyAliases = [
-        ["osx.iterm",  "macos.iterm"],
+        ["osx.iterm", "macos.iterm"],
         ["osx.macvim", "macos.macvim"]
     ];
     for (let [legacyValue, newValue] of openMethodLegacyAliases) {
@@ -71,7 +71,7 @@ function getConfiguration(): Config {
     return configuration;
 }
 
-function openInVim() {
+async function openInVim() {
     const { openMethod, useNeovim, restoreCursorAfterVim } = getConfiguration();
 
     let activeTextEditor = vscode.window.activeTextEditor;
@@ -111,13 +111,15 @@ function openInVim() {
 
     let position = activeTextEditor.selection.active;
     let fileName = activeTextEditor.document.fileName;
-    let line = position.line+1;
-    let column = position.character+1;
+    let line = position.line + 1;
+    let column = position.character + 1;
 
     /** autocmd VimLeavePre * execute "!code --goto '" . expand("%") . ":" . line(".") . ":" . col(".") . "'" */
     let AUTOCMD_TO_SYNC_CURSOR = `'+autocmd VimLeavePre * execute "!code --goto '"'"'" . expand("%") . ":" . line(".") . ":" . col(".") . "'"'"'"'`;
 
-    actualOpenMethod({
+    await vscode.commands.executeCommand("workbench.action.files.saveWithoutFormatting");
+
+    await actualOpenMethod({
         vim: useNeovim ? 'nvim' : 'vim',
         fileName: fileName,
         // cannot contain double quotes
@@ -136,7 +138,7 @@ interface OpenMethodsArgument {
 }
 
 type OpenMethods = {
-    [key in OpenMethodKey]: (a: OpenMethodsArgument) => void;
+    [key in OpenMethodKey]: (a: OpenMethodsArgument) => Promise<void>;
 };
 
 function openArgsToCommand(openArgs: OpenMethodsArgument) {
@@ -171,7 +173,7 @@ function ensureUnixPathFormat(path: string, isWslStyle: boolean): string {
 }
 
 const openMethods: OpenMethods = {
-    "gvim": (openArgs: OpenMethodsArgument) => {
+    "gvim": async (openArgs: OpenMethodsArgument) => {
         if (os.type().startsWith('Windows')) {
             const viewAlternatePlugin = 'View alternative plugin';
             vscode.window.showErrorMessage('Gvim is not supported on Windows. ლ(ಠ_ಠლ)', viewAlternatePlugin).then(choice => {
@@ -187,7 +189,7 @@ const openMethods: OpenMethods = {
             encoding: "utf8"
         });
     },
-    "integrated-terminal": (openArgs: OpenMethodsArgument) => {
+    "integrated-terminal": async (openArgs: OpenMethodsArgument) => {
         const shellPath = getConfiguration()['integrated-terminal'].pathToShell;
 
         if (!fs.existsSync(shellPath)) {
@@ -213,32 +215,37 @@ const openMethods: OpenMethods = {
 
         openArgs.fileName = ensureUnixPathFormat(openArgs.fileName, isWslStyle);
         openArgs.workspacePath = ensureUnixPathFormat(openArgs.workspacePath, isWslStyle);
+
         let terminal = vscode.window.createTerminal({
             name: "Open in Vim",
             shellPath,
             shellArgs: [
                 ensureUnixPathFormat(openArgsToScriptFile(openArgs), isWslStyle)
-            ]
+            ],
+            location: {
+                viewColumn: vscode.ViewColumn.Active
+            }
         });
         terminal.show(true);
-        vscode.commands.executeCommand("workbench.action.terminal.focus");
+
+        await vscode.commands.executeCommand("workbench.action.terminal.focus");
     },
-    "kitty": (openArgs: OpenMethodsArgument) => {
+    "kitty": async (openArgs: OpenMethodsArgument) => {
         let kittyCommand = `kitty --title 'vscode-open-in-vim' bash '${openArgsToScriptFile(openArgs)}'`;
         console.log(kittyCommand);
         execSync(kittyCommand);
     },
-    "linux.gnome-terminal": (openArgs: OpenMethodsArgument) => {
+    "linux.gnome-terminal": async (openArgs: OpenMethodsArgument) => {
         let args = getConfiguration().linux!['gnome-terminal']!.args;
         let gnomeTerminalCommand = `gnome-terminal ${args} --command='bash ${openArgsToScriptFile(openArgs)}'`;
         execSync(gnomeTerminalCommand);
     },
-    "linux.tilix": (openArgs: OpenMethodsArgument) => {
+    "linux.tilix": async (openArgs: OpenMethodsArgument) => {
         let args = getConfiguration().linux!.tilix!.args;
         let tilixCommand = `tilix ${args} --command='bash ${openArgsToScriptFile(openArgs)}'`;
         execSync(tilixCommand);
     },
-    "macos.iterm":  (openArgs: OpenMethodsArgument) => {
+    "macos.iterm": async (openArgs: OpenMethodsArgument) => {
         let profile = getConfiguration().macos!.iterm!.profile;
         if (profile !== "default profile") {
             profile = `profile "${profile}"`;
@@ -248,7 +255,7 @@ const openMethods: OpenMethods = {
               set myNewWin to create window with ${profile} command "bash ${openArgsToScriptFile(openArgs)}"
             end tell
         `;
-        let result = spawnSync("/usr/bin/osascript", {encoding: "utf8", input: osascriptcode});
+        let result = spawnSync("/usr/bin/osascript", { encoding: "utf8", input: osascriptcode });
         if (result.error) {
             throw result.error;
         }
@@ -256,7 +263,7 @@ const openMethods: OpenMethods = {
             throw result.stderr;
         }
     },
-    "macos.macvim": (openArgs: OpenMethodsArgument) => {
+    "macos.macvim": async (openArgs: OpenMethodsArgument) => {
         openArgs.vim = 'mvim';
         execSync(openArgsToCommand(openArgs), {
             cwd: openArgs.workspacePath,
