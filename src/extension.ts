@@ -173,7 +173,7 @@ function ensureUnixPathFormat(path: string, isWslStyle: boolean): string {
 }
 
 const openMethods: OpenMethods = {
-    "gvim": (openArgs: OpenMethodsArgument) => {
+    'gvim': (openArgs: OpenMethodsArgument) => {
         if (os.type().startsWith('Windows')) {
             const viewAlternatePlugin = 'View alternative plugin';
             vscode.window.showErrorMessage('Gvim is not supported on Windows. ლ(ಠ_ಠლ)', viewAlternatePlugin).then(choice => {
