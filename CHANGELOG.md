@@ -3,7 +3,7 @@ All notable changes to the "open-in-vim" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
+## [0.8.0] - 2024-08-16
 ### Changed
 - Modernized the extension's build, tooling, and dependencies
 - Now requires VS Code 1.90 or newer
