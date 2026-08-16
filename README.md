@@ -42,6 +42,15 @@ Contribute on [GitHub](https://github.com/jonsmithers/vscode-open-in-vim).
 
 [`code`]: https://code.visualstudio.com/docs/editor/command-line#_launching-from-command-line
 
+## Development
+
+To enable the pre-commit hook that checks formatting on staged files, run
+once after cloning:
+
+```
+git config core.hooksPath .githooks
+```
+
 ## To do
 
 - [ ] Support macOS' native Terminal app
